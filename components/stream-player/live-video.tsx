@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { useTracks } from "@livekit/components-react";
 import { FullscreenControl } from "./fullscreen-control";
 import { VolumeControl } from "./volume-control";
-import { Video } from "lucide-react";
 
 interface LiveVideoProps {
     participant: Participant;
