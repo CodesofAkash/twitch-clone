@@ -5,20 +5,17 @@ import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTr
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { IngressInput } from "livekit-server-sdk";
 import { useRef, useState, useTransition } from "react";
 import { createIngress } from "@/actions/ingress";
 import { toast } from "sonner";
 
-const RTMP = String(IngressInput.RTMP_INPUT);
-const WHIP = String(IngressInput.WHIP_INPUT);
-
-type IngressType = typeof RTMP | typeof WHIP;
+const RTMP = "0";
+const WHIP = "1"
 
 export const ConnectModal = () => {
     const closeRef = useRef<HTMLButtonElement>(null);
     const [ isPending, startTransition ] = useTransition();
-    const [ingressType, setIngressType] = useState<IngressType>(RTMP);
+    const [ingressType, setIngressType] = useState(RTMP);
 
     const onSubmit = () => {
         startTransition(() => {

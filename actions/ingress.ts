@@ -50,7 +50,7 @@ export const resetIngress = async (hostIdentity: string) => {
     }
 }
 
-export const createIngress = async (ingressType: IngressInput) => {
+export const createIngress = async (inputType: number) => {
     const self =  await getSelf();
 
     await resetIngress(self.id);
@@ -62,12 +62,13 @@ export const createIngress = async (ingressType: IngressInput) => {
         participantIdentity: self.id,
     };
 
-    if(ingressType === IngressInput.WHIP_INPUT) {
+    if(inputType === 1) {
         options.enableTranscoding = true;
     } else {
         options.video = videoOptions;
         options.audio = audioOptions;
     }
+    const ingressType = inputType === 0 ? IngressInput.RTMP_INPUT : IngressInput.WHIP_INPUT;
 
     const ingress = await ingressClient.createIngress(ingressType, options);
 
