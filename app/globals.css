@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "uploadthing/tw/v4";
+@source "../node_modules/@uploadthing/react/dist";
+
+
 @import "tw-animate-css";
 
 @theme {
@@ -75,6 +79,17 @@ body,
 :root {
   height: 100%;
 }
+
+
+/*  */
+body {
+  overflow: auto;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+/*  */
 
 .hidden-scrollbar {
   -ms-overflow-style: none;

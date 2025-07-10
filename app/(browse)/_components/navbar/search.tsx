@@ -21,7 +21,6 @@ export const Search = () => {
             url: "/search",
             query: { term: value },
         }, { skipEmptyString: true });
-
         router.push(url);
     }
 
