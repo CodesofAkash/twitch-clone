@@ -3,15 +3,16 @@ import { getUserByUsername } from "@/lib/user-service";
 import { currentUser } from "@clerk/nextjs/server";
 
 interface CreatorPageProps {
-    params: {
+    params: Promise<{
         username: string;
-    }
+    }>
 }
 
 const CreatorPage = async ({params}: CreatorPageProps) => {
 
     const externalUser = await currentUser();
-    const user = await getUserByUsername(params.username);
+    const { username } = await params;
+    const user = await getUserByUsername(username);
 
     if( !user || user.externalUserId !== externalUser?.id || !user.stream) {
         throw new Error("Unauthorized");

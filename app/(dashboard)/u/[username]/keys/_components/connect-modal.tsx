@@ -1,6 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { IngressInput } from "livekit-server-sdk";
+import { useState, useTransition, useRef, ElementRef } from "react";
+import { toast } from "sonner";
+
 import {
   Dialog,
   DialogClose,
@@ -9,12 +12,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert";
-import { AlertTriangle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -22,52 +21,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRef, useState, useTransition } from "react";
+import { AlertTriangle } from "lucide-react";
 import { createIngress } from "@/actions/ingress";
-import { toast } from "sonner";
 
-const RTMP = "0";
-const WHIP = "1";
+const RTMP = String(IngressInput.RTMP_INPUT);
+const WHIP = String(IngressInput.WHIP_INPUT);
+
+type IngressType = typeof RTMP | typeof WHIP;
 
 export const ConnectModal = () => {
-  const closeRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<ElementRef<"button">>(null);
   const [isPending, startTransition] = useTransition();
-  const [ingressType, setIngressType] = useState(RTMP);
+  const [ingressType, setIngressType] = useState<IngressType>(RTMP);
 
   const onSubmit = () => {
     startTransition(() => {
       createIngress(parseInt(ingressType))
         .then(() => {
           toast.success("Ingress created");
-          closeRef.current?.click();
+          closeRef?.current?.click();
         })
-        .catch((error) => {
-          if (error.message === "INGRESS_LIMIT_REACHED") {
-            toast.error(
-              "Another streamer is currently live. Please try again later."
-            );
-          } else {
-            toast.error("Something went wrong");
-          }
-        });
+        .catch(() => toast.error("Something went wrong"));
     });
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="primary">Generate Connection</Button>
+        <Button variant="primary">Generate connection</Button>
       </DialogTrigger>
-
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Generate Connection</DialogTitle>
+          <DialogTitle>Generate connection</DialogTitle>
         </DialogHeader>
-
         <Select
           disabled={isPending}
           value={ingressType}
-          onValueChange={setIngressType}
+          onValueChange={(value) => setIngressType(value)}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Ingress Type" />
@@ -77,24 +67,19 @@ export const ConnectModal = () => {
             <SelectItem value={WHIP}>WHIP</SelectItem>
           </SelectContent>
         </Select>
-
         <Alert>
           <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Warning</AlertTitle>
+          <AlertTitle>Warning!</AlertTitle>
           <AlertDescription>
-            This will reset any existing stream connection.
+            This action will reset all active streams using the current
+            connection
           </AlertDescription>
         </Alert>
-
         <div className="flex justify-between">
           <DialogClose ref={closeRef} asChild>
             <Button variant="ghost">Cancel</Button>
           </DialogClose>
-          <Button
-            disabled={isPending}
-            onClick={onSubmit}
-            variant="primary"
-          >
+          <Button disabled={isPending} onClick={onSubmit} variant="primary">
             Generate
           </Button>
         </div>

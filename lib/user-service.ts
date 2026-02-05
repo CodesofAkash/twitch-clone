@@ -1,47 +1,63 @@
-import { db } from "./db"
-
-export const getUserByUsername = async (username: string) => {
-    const user = await db.user.findUnique({
-        where: {
-            username,
-        },
-        select: {
-            id: true,
-            externalUserId: true,
-            username: true,
-            bio: true,
-            imageUrl: true,
-            stream: {
-                select: {
-                    id: true,
-                    name: true,
-                    thumbnailUrl: true,
-                    isLive: true,
-                    isChatDelayed: true,
-                    isChatEnabled: true,
-                    isChatFollowersOnly: true,
-                }
-            },
-            _count: {
-                select: {
-                    followers: true,
-                }
-            }
-        }
-    });
-
-    return user;
-}
+import { db } from "@/lib/db";
 
 export const getUserById = async (id: string) => {
-    const user = await db.user.findUnique({
-        where: {
-            id,
+  const user = await db.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      username: true,
+      imageUrl: true,
+      externalUserId: true,
+      bio: true,
+      stream: {
+        select: {
+          id: true,
+          isLive: true,
+          isChatDelayed: true,
+          isChatEnabled: true,
+          isChatFollowersOnly: true,
+          thumbnailUrl: true,
+          name: true,
         },
-        include: {
-            stream: true,
-        }
-    });
+      },
+      _count: {
+        select: {
+          followers: true,
+        },
+      },
+    },
+  });
 
-    return user;
-}
+  return user;
+};
+
+export const getUserByUsername = async (username: string) => {
+  const user = await db.user.findUnique({
+    where: { username },
+    select: {
+      id: true,
+      username: true,
+      imageUrl: true,
+      externalUserId: true,
+      bio: true,
+      stream: {
+        select: {
+          id: true,
+          isLive: true,
+          isChatDelayed: true,
+          isChatEnabled: true,
+          isChatFollowersOnly: true,
+          thumbnailUrl: true,
+          name: true,
+        },
+      },
+      _count: {
+        select: {
+          followers: true,
+        },
+      },
+    },
+  });
+
+  return user;
+};

@@ -1,43 +1,43 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { Stream } from "@prisma/client";
 import { db } from "@/lib/db";
-import  { getSelf } from "@/lib/auth-service";
+import { getSelf } from "@/lib/auth-service";
+import { Stream } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 export const updateStream = async (values: Partial<Stream>) => {
-    try {
-        const self = await getSelf();
-        const selfStream = await db.stream.findUnique({
-            where: { userId: self.id }
-        });
+  const self = await getSelf();
 
-        if(!selfStream) {
-            throw new Error("Stream not found for the user");
-        }
+  const selfStream = await db.stream.findUnique({
+    where: {
+      userId: self.id,
+    },
+  });
 
-        const validData = {
-            thumbnailUrl: values.thumbnailUrl,
-            name: values.name,
-            isChatEnabled: values.isChatEnabled,
-            isChatFollowersOnly: values.isChatFollowersOnly,
-            isChatDelayed: values.isChatDelayed,
-        };
+  if (!selfStream) {
+    throw new Error("Stream not found");
+  }
 
-        const stream = await db.stream.update({
-            where: { id: selfStream.id },
-            data: {
-                ...validData,
-            },
-        });
+  const validData = {
+    name: values.name,
+    thumbnailUrl: values.thumbnailUrl,
+    isChatEnabled: values.isChatEnabled,
+    isChatFollowersOnly: values.isChatFollowersOnly,
+    isChatDelayed: values.isChatDelayed,
+  };
 
-        revalidatePath(`/u/${self.username}/chat`);
-        revalidatePath(`/u/${self.username}`);
-        revalidatePath(`/${self.username}`);
+  const stream = await db.stream.update({
+    where: {
+      id: selfStream.id,
+    },
+    data: {
+      ...validData,
+    },
+  });
 
-        return stream;
+  revalidatePath(`/u/${self.username}/chat`);
+  revalidatePath(`/u/${self.username}`);
+  revalidatePath(`/${self.username}`);
 
-    } catch {
-        throw new Error("Internal Error");
-    }
-}
+  return stream;
+};
