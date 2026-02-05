@@ -2,7 +2,6 @@
 
 import { useTransition } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,6 @@ export const Actions = ({
   isHost,
 }: ActionsProps) => {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   const handleFollow = () => {
     startTransition(() => {

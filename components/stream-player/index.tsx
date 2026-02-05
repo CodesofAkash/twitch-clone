@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { LiveKitRoom } from "@livekit/components-react";
-import { User, Stream } from "@prisma/client";
 import { useViewerToken } from "@/hooks/use-viewer-token";
 import { Video, VideoSkeleton } from "./video";
 import { useChatSidebar } from "@/store/use-chat-sidebar";

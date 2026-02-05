@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Container } from "./_components/container";
 import { Navbar } from "./_components/navbar";
 import { Sidebar, SidebarSkeleton } from "./_components/sidebar";
+import { AutoRefresh } from "./_components/auto-refresh";
 
 const BrowseLayout = ({
     children,
@@ -19,6 +20,7 @@ const BrowseLayout = ({
                 {children}
             </Container>
         </div>
+        <AutoRefresh />
         </>
     );
 }

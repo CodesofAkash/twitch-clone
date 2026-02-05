@@ -2,11 +2,10 @@
 
 import { useParticipants } from "@livekit/components-react";
 import { useMemo, useState } from "react";
-import { useDebounce } from "usehooks-ts";
+import { useDebounceValue } from "usehooks-ts";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CommunityItem } from "./community-item";
-import { LocalParticipant, RemoteParticipant } from "livekit-client";
 
 interface ChatCommunityProps {
   viewerName: string;
@@ -20,7 +19,7 @@ export const ChatCommunity = ({
   isHidden,
 }: ChatCommunityProps) => {
   const [value, setValue] = useState("");
-  const debouncedValue = useDebounce<string>(value, 500);
+  const [debouncedValue] = useDebounceValue<string>(value, 500);
   const participants = useParticipants();
 
   const onChange = (newValue: string) => {
@@ -28,14 +27,20 @@ export const ChatCommunity = ({
   };
 
   const filteredParticipants = useMemo(() => {
-    const deduped = participants.reduce((acc, participant) => {
-      const hostAsViewer = `host-${participant.identity}`;
-      if (!acc.some((p) => p.identity === hostAsViewer)) {
-        acc.push(participant);
+    // Remove duplicates by identity
+    const seen = new Set<string>();
+    const deduped = participants.filter((participant) => {
+      // Extract actual identity (remove "host-" prefix if present)
+      const actualIdentity = participant.identity.replace(/^host-/, "");
+      
+      if (seen.has(actualIdentity)) {
+        return false;
       }
-      return acc;
-    }, [] as (RemoteParticipant | LocalParticipant)[]);
+      seen.add(actualIdentity);
+      return true;
+    });
 
+    // Filter by search term
     return deduped.filter((participant) => {
       return participant.name
         ?.toLowerCase()

@@ -1,6 +1,6 @@
 "use client";
 
-import { VerifiedMark } from "@/components/verified-mark";
+import { VerifiedMark } from "@/components/verified";
 import { BioModal } from "./bio-modal";
 
 interface AboutCardProps {

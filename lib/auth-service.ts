@@ -28,6 +28,9 @@ export const getSelfByUsername = async (username: string) => {
 
     const user = await db.user.findUnique({
         where: {username},
+        include: {
+            stream: true, // ADD THIS LINE
+        },
     });
 
     if (!user) {

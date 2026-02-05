@@ -121,7 +121,7 @@ export const InfoModal = ({
                       color: "#FFFFFF",
                     },
                   }}
-                  onClientUploadComplete={(res) => {
+                  onClientUploadComplete={(res: { url: string }[]) => {
                     setThumbnailUrl(res?.[0]?.url);
                     router.refresh();
                     closeRef?.current?.click();

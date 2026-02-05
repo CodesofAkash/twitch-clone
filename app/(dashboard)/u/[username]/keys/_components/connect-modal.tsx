@@ -2,6 +2,7 @@
 
 import { IngressInput } from "livekit-server-sdk";
 import { useState, useTransition, useRef, ElementRef } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import {
@@ -30,6 +31,7 @@ const WHIP = String(IngressInput.WHIP_INPUT);
 type IngressType = typeof RTMP | typeof WHIP;
 
 export const ConnectModal = () => {
+  const router = useRouter();
   const closeRef = useRef<ElementRef<"button">>(null);
   const [isPending, startTransition] = useTransition();
   const [ingressType, setIngressType] = useState<IngressType>(RTMP);
@@ -39,6 +41,7 @@ export const ConnectModal = () => {
       createIngress(parseInt(ingressType))
         .then(() => {
           toast.success("Ingress created");
+          router.refresh(); // Force page refresh
           closeRef?.current?.click();
         })
         .catch(() => toast.error("Something went wrong"));

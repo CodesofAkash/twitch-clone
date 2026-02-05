@@ -48,7 +48,6 @@ export const resetIngresses = async (hostIdentity: string) => {
 export const createIngress = async (ingressType: IngressInput) => {
   const self = await getSelf();
 
-  // Reset any existing ingresses
   await resetIngresses(self.id);
 
   const options: CreateIngressOptions = {
@@ -94,5 +93,10 @@ export const createIngress = async (ingressType: IngressInput) => {
 
   revalidatePath(`/u/${self.username}/keys`);
 
-  return ingress;
+  // FIX: Return plain object instead of LiveKit class instance
+  return {
+    ingressId: ingress.ingressId,
+    url: ingress.url,
+    streamKey: ingress.streamKey,
+  };
 };

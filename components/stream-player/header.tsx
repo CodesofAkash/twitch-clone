@@ -6,7 +6,7 @@ import {
 } from "@livekit/components-react";
 import { UserIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { VerifiedMark } from "@/components/verified-mark";
+import { VerifiedMark } from "@/components/verified";
 import { UserAvatar, UserAvatarSkeleton } from "@/components/user-avatar";
 import { Actions, ActionsSkeleton } from "./actions";
 

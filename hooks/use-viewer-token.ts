@@ -13,24 +13,29 @@ export const useViewerToken = (hostIdentity: string) => {
   useEffect(() => {
     const createToken = async () => {
       try {
+        console.log("🔑 Creating token for:", hostIdentity);
         const viewerToken = await createViewerToken(hostIdentity);
+        console.log("✅ Token created successfully");
         setToken(viewerToken);
 
         const decodedToken = jwtDecode(viewerToken) as JwtPayload & {
           name?: string;
         };
 
-        const name = decodedToken?.name;
-        const identity = decodedToken.jti;
+        const tokenName = decodedToken?.name;
+        const tokenIdentity = decodedToken.sub || decodedToken.jti; // FIX: Use sub as fallback
 
-        if (identity) {
-          setIdentity(identity);
+        if (tokenIdentity) {
+          setIdentity(tokenIdentity);
         }
 
-        if (name) {
-          setName(name);
+        if (tokenName) {
+          setName(tokenName);
         }
-      } catch {
+        
+        console.log("✅ Token decoded - Name:", tokenName, "Identity:", tokenIdentity);
+      } catch (error) {
+        console.error("❌ Token creation failed:", error);
         toast.error("Something went wrong");
       }
     };
