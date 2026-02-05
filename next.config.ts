@@ -2,20 +2,28 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: [
-      "img.clerk.com",
-      "q5oayrdeu3.ufs.sh"
-    ],
+    domains: ["img.clerk.com", "q5oayrdeu3.ufs.sh"],
   },
-  
-  webpack: (config) => {
+
+  webpack: (config, { isServer }) => {
     config.externals.push({
       "utf-8-validate": "commonjs utf-8-validate",
       bufferutil: "commonjs bufferutil",
     });
+
+    // Optimize bundle size
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
+
     return config;
   },
-  
+
   async headers() {
     return [
       {
@@ -36,14 +44,16 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  
+
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
+
   typescript: {
     ignoreBuildErrors: true,
   },
+
+  output: "standalone", // THIS IS THE KEY LINE
 };
 
 export default nextConfig;
