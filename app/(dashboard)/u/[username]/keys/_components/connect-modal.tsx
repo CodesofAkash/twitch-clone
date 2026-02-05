@@ -1,7 +1,6 @@
 "use client";
 
-import { IngressInput } from "livekit-server-sdk";
-import { useState, useTransition, useRef, ElementRef } from "react";
+import { useState, useTransition, useRef, ComponentRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -25,14 +24,14 @@ import {
 import { AlertTriangle } from "lucide-react";
 import { createIngress } from "@/actions/ingress";
 
-const RTMP = String(IngressInput.RTMP_INPUT);
-const WHIP = String(IngressInput.WHIP_INPUT);
+const RTMP = "0"; // RTMP_INPUT
+const WHIP = "1"; // WHIP_INPUT
 
 type IngressType = typeof RTMP | typeof WHIP;
 
 export const ConnectModal = () => {
   const router = useRouter();
-  const closeRef = useRef<ElementRef<"button">>(null);
+  const closeRef = useRef<ComponentRef<"button">>(null);
   const [isPending, startTransition] = useTransition();
   const [ingressType, setIngressType] = useState<IngressType>(RTMP);
 
@@ -60,7 +59,7 @@ export const ConnectModal = () => {
         <Select
           disabled={isPending}
           value={ingressType}
-          onValueChange={(value) => setIngressType(value)}
+          onValueChange={(value) => setIngressType(value as IngressType)}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Ingress Type" />
