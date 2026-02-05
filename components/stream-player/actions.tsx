@@ -14,11 +14,7 @@ interface ActionsProps {
   isHost: boolean;
 }
 
-export const Actions = ({
-  hostIdentity,
-  isFollowing,
-  isHost,
-}: ActionsProps) => {
+export const Actions = ({ hostIdentity, isFollowing, isHost }: ActionsProps) => {
   const [isPending, startTransition] = useTransition();
 
   const handleFollow = () => {
@@ -27,7 +23,13 @@ export const Actions = ({
         .then((data) =>
           toast.success(`You are now following ${data.following.username}`)
         )
-        .catch(() => toast.error("Something went wrong"));
+        .catch((err) => {
+          if (err?.message?.includes("NEXT_REDIRECT")) {
+            window.location.href = "/sign-in";
+            return;
+          }
+          toast.error("Something went wrong");
+        });
     });
   };
 
@@ -37,7 +39,13 @@ export const Actions = ({
         .then((data) =>
           toast.success(`You have unfollowed ${data.following.username}`)
         )
-        .catch(() => toast.error("Something went wrong"));
+        .catch((err) => {
+          if (err?.message?.includes("NEXT_REDIRECT")) {
+            window.location.href = "/sign-in";
+            return;
+          }
+          toast.error("Something went wrong");
+        });
     });
   };
 
