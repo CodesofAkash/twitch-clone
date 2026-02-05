@@ -1,4 +1,5 @@
 "use client";
+//fix follow for guest user to redirect to login page
 
 import { useTransition } from "react";
 import { toast } from "sonner";
@@ -14,7 +15,11 @@ interface ActionsProps {
   isHost: boolean;
 }
 
-export const Actions = ({ hostIdentity, isFollowing, isHost }: ActionsProps) => {
+export const Actions = ({
+  hostIdentity,
+  isFollowing,
+  isHost,
+}: ActionsProps) => {
   const [isPending, startTransition] = useTransition();
 
   const handleFollow = () => {
@@ -23,13 +28,7 @@ export const Actions = ({ hostIdentity, isFollowing, isHost }: ActionsProps) => 
         .then((data) =>
           toast.success(`You are now following ${data.following.username}`)
         )
-        .catch((err) => {
-          if (err?.message?.includes("NEXT_REDIRECT")) {
-            window.location.href = "/sign-in";
-            return;
-          }
-          toast.error("Something went wrong");
-        });
+        .catch(() => toast.error("Something went wrong"));
     });
   };
 
@@ -39,13 +38,7 @@ export const Actions = ({ hostIdentity, isFollowing, isHost }: ActionsProps) => 
         .then((data) =>
           toast.success(`You have unfollowed ${data.following.username}`)
         )
-        .catch((err) => {
-          if (err?.message?.includes("NEXT_REDIRECT")) {
-            window.location.href = "/sign-in";
-            return;
-          }
-          toast.error("Something went wrong");
-        });
+        .catch(() => toast.error("Something went wrong"));
     });
   };
 
