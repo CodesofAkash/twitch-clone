@@ -5,6 +5,7 @@ import { isBlockedByUser } from "@/lib/block-service";
 import { StreamPlayer } from "@/components/stream-player";
 import { Suspense } from "react";
 import { StreamPlayerSkeleton } from "@/components/stream-player";
+import { StreamPlayerErrorBoundary } from "@/components/stream-player/error-boundary";
 
 interface UserPageProps {
   params: Promise<{
@@ -30,9 +31,11 @@ const UserPage = async ({ params }: UserPageProps) => {
   }
 
   return (
-    <Suspense fallback={<StreamPlayerSkeleton />}>
-      <StreamPlayer user={user} stream={user.stream} isFollowing={isFollowing} />
-    </Suspense>
+    <StreamPlayerErrorBoundary>
+      <Suspense fallback={<StreamPlayerSkeleton />}>
+        <StreamPlayer user={user} stream={user.stream} isFollowing={isFollowing} />
+      </Suspense>
+    </StreamPlayerErrorBoundary>
   );
 };
 
