@@ -2,71 +2,87 @@ import { db } from "./db";
 import { getSelf } from "./auth-service";
 
 export const getRecommended = async () => {
-    let userId;
+  let userId;
 
-    try {
-        const self = await getSelf();
-        userId = self.id;
-    } catch {
-        userId = null;
-    }
+  try {
+    const self = await getSelf();
+    userId = self.id;
+  } catch {
+    userId = null;
+  }
 
-    let users = [];
+  let users = [];
 
-    if(userId) {
-        users = await db.user.findMany({
-            where: {
-                AND: [
-                    {
-                        NOT: {
-                            id: userId
-                        },
-                    },
-                    {
-                        NOT: {
-                            followers: {
-                                some: {
-                                    followerId: userId,
-                                }
-                            }
-                        }
-                    },
-                    {
-                        NOT: {
-                            blocking: {
-                                some: {
-                                    blockedId: userId,
-                                }
-                            }
-                        }
-                    }
-                ],
+  if (userId) {
+    users = await db.user.findMany({
+      where: {
+        AND: [
+          { id: { not: userId } },
+          {
+            followers: {
+              none: {
+                followerId: userId,
+              },
             },
-            include: {
-                stream: {
-                    select: {
-                        isLive: true,
-                    }
-                },
+          },
+          {
+            blocking: {
+              none: {
+                blockedId: userId,
+              },
             },
-            orderBy: {
-                createdAt: "desc"
-            }
-        })
-    } else {   
-        users = await db.user.findMany({
-            include: {
-                stream: {
-                    select: {
-                        isLive: true,
-                    }
-                },
-            },
-            orderBy: {
-                createdAt: "desc"
-            },
-        });
-    }
+          },
+        ],
+      },
+      select: {
+        id: true,
+        username: true,
+        imageUrl: true,
+        stream: {
+          select: {
+            id: true,
+            isLive: true,
+          },
+        },
+      },
+      orderBy: [
+        {
+          stream: {
+            isLive: "desc",
+          },
+        },
+        {
+          createdAt: "desc",
+        },
+      ],
+      take: 10,
+    });
+  } else {
+    users = await db.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        imageUrl: true,
+        stream: {
+          select: {
+            id: true,
+            isLive: true,
+          },
+        },
+      },
+      orderBy: [
+        {
+          stream: {
+            isLive: "desc",
+          },
+        },
+        {
+          createdAt: "desc",
+        },
+      ],
+      take: 10,
+    });
+  }
 
-    return users;
-}
+  return users;
+};
