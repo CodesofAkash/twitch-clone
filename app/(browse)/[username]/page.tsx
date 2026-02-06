@@ -12,6 +12,8 @@ interface UserPageProps {
   }>;
 }
 
+export const revalidate = 300;
+
 const UserPage = async ({ params }: UserPageProps) => {
   const { username } = await params;
   const user = await getUserByUsername(username);
