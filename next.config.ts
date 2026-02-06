@@ -2,7 +2,19 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["img.clerk.com", "q5oayrdeu3.ufs.sh"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.ufs.sh", // UploadThing
+      },
+    ],
+    formats: ["image/avif", "image/webp"], // Modern formats
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920], // Responsive sizes
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
   webpack: (config, { isServer }) => {
