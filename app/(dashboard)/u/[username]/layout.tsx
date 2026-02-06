@@ -1,36 +1,32 @@
-import { getSelfByUsername } from "@/lib/auth-service";
 import { redirect } from "next/navigation";
+import { getSelfByUsername } from "@/lib/auth-service";
 import { Navbar } from "./_components/navbar";
 import { Sidebar } from "./_components/sidebar";
 import { Container } from "./_components/container";
 
 interface CreatorLayoutProps {
-    children: React.ReactNode;
-    params: Promise<{
-        username: string;
-    }>;
+  params: Promise<{ username: string }>;
+  children: React.ReactNode;
 }
 
 const CreatorLayout = async ({ params, children }: CreatorLayoutProps) => {
+  const { username } = await params;
 
-    const { username } = await params;
-    const self = await getSelfByUsername(username);
+  try {
+    await getSelfByUsername(username);
+  } catch {
+    redirect("/");
+  }
 
-    if(!self) {
-        redirect("/");
-    }
-
-    return (
-        <>
-        <Navbar />
-        <div className="flex h-full pt-20">
-            <Sidebar />
-            <Container>
-                {children}
-            </Container>
-        </div>
-        </>
-    )
-}
+  return (
+    <>
+      <Navbar />
+      <div className="flex h-full pt-20">
+        <Sidebar />
+        <Container>{children}</Container>
+      </div>
+    </>
+  );
+};
 
 export default CreatorLayout;

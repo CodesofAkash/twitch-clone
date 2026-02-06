@@ -1,13 +1,14 @@
 "use client";
-//fix follow for guest user to redirect to login page
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { onFollow, onUnfollow } from "@/actions/follow";
+import { useAuth } from "@clerk/nextjs";
 
 interface ActionsProps {
   hostIdentity: string;
@@ -21,8 +22,14 @@ export const Actions = ({
   isHost,
 }: ActionsProps) => {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const { userId } = useAuth();
 
   const handleFollow = () => {
+    if (!userId) {
+      return router.push("/sign-in");
+    }
+
     startTransition(() => {
       onFollow(hostIdentity)
         .then((data) =>
@@ -33,6 +40,10 @@ export const Actions = ({
   };
 
   const handleUnfollow = () => {
+    if (!userId) {
+      return router.push("/sign-in");
+    }
+
     startTransition(() => {
       onUnfollow(hostIdentity)
         .then((data) =>
