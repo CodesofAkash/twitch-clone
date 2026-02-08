@@ -20,18 +20,31 @@ export const Thumbnail = ({
   let content;
 
   if (!src) {
-    // Show avatar if no thumbnail
-    content = (
-      <div className="bg-background flex flex-col items-center justify-center gap-y-4 h-full w-full transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 rounded-md">
-        <UserAvatar
-          size="lg"
-          showBadge={false}
-          username={username}
-          imageUrl={fallback}
-          isLive={false}
-        />
-      </div>
-    );
+    // Show logo for guests, avatar for logged in users
+    if (!fallback) {
+      content = (
+        <div className="bg-background flex flex-col items-center justify-center gap-y-4 h-full w-full transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 rounded-md">
+          <Image
+            src="/spooky.svg"
+            fill
+            alt="No thumbnail"
+            className="object-contain"
+          />
+        </div>
+      );
+    } else {
+      content = (
+        <div className="bg-background flex flex-col items-center justify-center gap-y-4 h-full w-full transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 rounded-md">
+          <UserAvatar
+            size="lg"
+            showBadge={false}
+            username={username}
+            imageUrl={fallback}
+            isLive={false}
+          />
+        </div>
+      );
+    }
   } else {
     content = (
       <Image
