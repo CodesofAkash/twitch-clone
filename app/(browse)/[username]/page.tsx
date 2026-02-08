@@ -37,8 +37,8 @@ const UserPage = async ({ params }: UserPageProps) => {
     description: user.bio || `Live stream by ${user.username}`,
     thumbnailUrl: user.stream?.thumbnailUrl || user.imageUrl,
     uploadDate: user.stream?.createdAt?.toISOString(),
-    contentUrl: `https://your-domain.com/${user.username}`,
-    embedUrl: `https://your-domain.com/${user.username}`,
+    contentUrl: `https://twitch-clone--codesofakash.vercel.app/${user.username}`,
+    embedUrl: `https://twitch-clone--codesofakash.vercel.app/${user.username}`,
     isLiveBroadcast: user.stream?.isLive,
   };
 

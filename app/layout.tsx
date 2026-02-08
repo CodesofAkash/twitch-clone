@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://your-domain.com",
+    url: "https://twitch-clone--codesofakash.vercel.app",
     siteName: "Twitch Clone",
     title: "Twitch Clone - Live Streaming Platform",
     description: "Watch live streams and interact with creators",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Twitch Clone",
     description: "Live streaming platform",
-    creator: "@yourhandle",
+    creator: "@CodesOfAkash",
   },
   robots: {
     index: true,
@@ -84,6 +84,6 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "google-site-verification=Ljf9QLc-TeK5cr7pmylRf3Yu2EtUy4HXaisNv4d0u_E",
   },
 };
