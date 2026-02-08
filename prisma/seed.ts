@@ -18,7 +18,7 @@ async function main() {
       stream: {
         name: "🔥 RANKED GRIND - Road to Radiant",
         thumbnailUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1920&h=1080&fit=crop",
-        isLive: false, // LIVE
+        isLive: false, // OFFLINE
       },
     },
     {
@@ -29,7 +29,7 @@ async function main() {
       stream: {
         name: "FACEIT Level 10 Grind | !sensitivity !crosshair",
         thumbnailUrl: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1920&h=1080&fit=crop",
-        isLive: false, // LIVE
+        isLive: false, // OFFLINE
       },
     },
 
@@ -42,7 +42,7 @@ async function main() {
       stream: {
         name: "Painting Fantasy Characters - Chill Stream",
         thumbnailUrl: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=1920&h=1080&fit=crop",
-        isLive: false, // LIVE
+        isLive: false, // OFFLINE
       },
     },
 
@@ -55,7 +55,7 @@ async function main() {
       stream: {
         name: "Morning Coffee Chat ☕ Let's Talk!",
         thumbnailUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1920&h=1080&fit=crop",
-        isLive: false, // LIVE
+        isLive: false, // OFFLINE
       },
     },
 
@@ -89,7 +89,7 @@ async function main() {
       bio: "Horror game enthusiast | Jump scares guaranteed | Not for the faint-hearted 😱",
       stream: {
         name: "Resident Evil Village - First Playthrough (Scared)",
-        thumbnailUrl: "https://images.unsplash.com/photo-1614465304860-05af03984ff0?w=1920&h=1080&fit=crop",
+        thumbnailUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1920&h=1080&fit=crop",
         isLive: false, // OFFLINE
       },
     },
@@ -135,7 +135,7 @@ async function main() {
       bio: "Professional DJ | House & EDM mixes | Weekend party vibes 🎉",
       stream: {
         name: "🔊 LIVE DJ SET - House Music Marathon",
-        thumbnailUrl: "https://images.unsplash.com/photo-1571266028243-d220c3f2e6c4?w=1920&h=1080&fit=crop",
+        thumbnailUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1920&h=1080&fit=crop",
         isLive: false, // OFFLINE
       },
     },
