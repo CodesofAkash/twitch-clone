@@ -1,4 +1,3 @@
-// components/thumbnail.tsx
 import Image from "next/image";
 import { UserAvatar } from "@/components/user-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,39 +19,27 @@ export const Thumbnail = ({
   let content;
 
   if (!src) {
-    // Show logo for guests, avatar for logged in users
-    if (!fallback) {
-      content = (
-        <div className="bg-background flex flex-col items-center justify-center gap-y-4 h-full w-full transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 rounded-md">
-          <Image
-            src="/spooky.svg"
-            fill
-            alt="No thumbnail"
-            className="object-contain"
-          />
-        </div>
-      );
-    } else {
-      content = (
-        <div className="bg-background flex flex-col items-center justify-center gap-y-4 h-full w-full transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 rounded-md">
-          <UserAvatar
-            size="lg"
-            showBadge={false}
-            username={username}
-            imageUrl={fallback}
-            isLive={false}
-          />
-        </div>
-      );
-    }
+    content = (
+      <div className="bg-background flex flex-col items-center justify-center gap-y-4 h-full w-full transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 rounded-md">
+        <UserAvatar
+          size="lg"
+          showBadge={false}
+          username={username}
+          imageUrl={fallback}
+          isLive={false}
+        />
+      </div>
+    );
   } else {
     content = (
       <Image
         src={src}
         fill
-        alt="Thumbnail"
+        alt={username}
         className="object-cover transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 rounded-md"
-        unoptimized // ADD THIS to prevent Next.js image optimization errors
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        priority={false}
+        unoptimized // Prevents 404 errors with dynamic URLs
       />
     );
   }

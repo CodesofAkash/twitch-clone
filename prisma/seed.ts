@@ -248,7 +248,7 @@ async function main() {
       },
       stream: {
         name: "🔊 LIVE DJ SET - House Music Marathon",
-        thumbnailUrl: "https://images.unsplash.com/photo-1571266028243-d220c3f2e6c4?w=1920&h=1080&fit=crop",
+        thumbnailUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1920&h=1080&fit=crop",
         isLive: true,
         categorySlug: "music",
         viewerCount: 5621,
@@ -298,7 +298,7 @@ async function main() {
       },
       stream: {
         name: "Resident Evil Village - First Playthrough (Scared)",
-        thumbnailUrl: "https://images.unsplash.com/photo-1614465304860-05af03984ff0?w=1920&h=1080&fit=crop",
+        thumbnailUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1920&h=1080&fit=crop",
         isLive: false,
         categorySlug: "horror",
         viewerCount: 0,

@@ -1,4 +1,3 @@
-// app/(browse)/(home)/_components/featured-carousel.tsx - COMPLETE REWRITE
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -32,7 +31,7 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev + 1) % streams.length);
     
-    setTimeout(() => setIsTransitioning(false), 700); // Match transition duration
+    setTimeout(() => setIsTransitioning(false), 700);
   }, [isTransitioning, streams.length]);
 
   const prevSlide = useCallback(() => {
@@ -58,7 +57,7 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
     
     const timer = setInterval(() => {
       nextSlide();
-    }, 7000); // 7 seconds per slide
+    }, 7000); // 7 seconds - longer wait
 
     return () => clearInterval(timer);
   }, [nextSlide, streams.length]);
@@ -73,7 +72,6 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
     <div className="relative h-[400px] w-full bg-gradient-to-b from-background to-transparent mb-8 overflow-hidden">
       <Link href={`/${current.username}`}>
         <div className="relative h-full w-full">
-          {/* Image with smooth transition */}
           <div className={`
             absolute inset-0 transition-opacity duration-700 ease-in-out
             ${isTransitioning ? 'opacity-0' : 'opacity-100'}
@@ -84,15 +82,14 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
               fill
               className="object-cover"
               priority
+              sizes="100vw"
               unoptimized
             />
           </div>
           
-          {/* Gradient overlays */}
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/30 to-transparent" />
           
-          {/* Content with fade transition */}
           <div className={`
             absolute bottom-0 left-0 p-8 max-w-2xl transition-all duration-700 ease-in-out
             ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}
@@ -122,7 +119,6 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
         </div>
       </Link>
 
-      {/* Navigation Buttons */}
       {streams.length > 1 && (
         <>
           <Button
@@ -153,7 +149,6 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
         </>
       )}
 
-      {/* Dots Indicator */}
       {streams.length > 1 && (
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
           {streams.map((_, index) => (
