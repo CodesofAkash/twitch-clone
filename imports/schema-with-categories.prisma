@@ -7,7 +7,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model User {
@@ -133,3 +132,7 @@ model Block {
   @@index([blockerId])
   @@index([blockedId])
 }
+
+// After updating schema, run:
+// npx prisma db push
+// npx prisma generate
