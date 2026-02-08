@@ -1,28 +1,38 @@
 import { redirect } from "next/navigation";
-import Results, { ResultsSkeleton } from "./_components/results";
 import { Suspense } from "react";
 
+import { Results, ResultsSkeleton } from "./_components/results";
+
 interface SearchPageProps {
-    searchParams: Promise<{
-        term?: string;
-    }>;
+  searchParams: {
+    term?: string;
+    category?: string;
+    live?: string;
+    sort?: string;
+  };
 }
 
-const SearchPage = async ({ searchParams }: SearchPageProps) => {
+const SearchPage = async ({
+  searchParams,
+}: SearchPageProps) => {
+  const params = await searchParams;
 
-    const { term } = await searchParams;
+  if (!params.term && !params.category) {
+    redirect("/");
+  }
 
-    if(!term) {
-        redirect("/");
-    }
-
-    return (
-        <div className="h-full p-8 max-w-screen-2xl mx-auto">
-            <Suspense fallback={<ResultsSkeleton />}>
-                <Results term={term} />
-            </Suspense>
-        </div>
-    )
-}
+  return (
+    <div className="h-full p-8 max-w-screen-2xl mx-auto">
+      <Suspense fallback={<ResultsSkeleton />}>
+        <Results 
+          term={params.term}
+          category={params.category}
+          liveOnly={params.live === "true"}
+          sortBy={params.sort as "viewers" | "recent" | undefined}
+        />
+      </Suspense>
+    </div>
+  );
+};
 
 export default SearchPage;

@@ -5,6 +5,7 @@ import {
   useRemoteParticipant,
 } from "@livekit/components-react";
 import { UserIcon } from "lucide-react";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { VerifiedMark } from "@/components/verified";
 import { UserAvatar, UserAvatarSkeleton } from "@/components/user-avatar";
@@ -31,7 +32,7 @@ export const Header = ({
   const participant = useRemoteParticipant(hostIdentity);
 
   const isLive = !!participant;
-  const participantCount = participants.length - 1;
+  const participantCount = participants.length - 1; // Exclude host
 
   const hostAsViewer = `host-${hostIdentity}`;
   const isHost = viewerIdentity === hostAsViewer;
@@ -48,19 +49,21 @@ export const Header = ({
         />
         <div className="space-y-1">
           <div className="flex items-center gap-x-2">
-            <h2 className="text-lg font-semibold">{hostName}</h2>
+            <h2 className="text-lg font-semibold">
+              {hostName}
+            </h2>
             <VerifiedMark />
           </div>
           <p className="text-sm font-semibold">{name}</p>
-          {isLive ? (
-            <div className="font-semibold flex gap-x-1 items-center text-xs text-rose-500">
+          {isLive && (
+            <div className="flex items-center gap-x-1 text-xs text-muted-foreground">
               <UserIcon className="h-4 w-4" />
               <p>
-                {participantCount}{" "}
-                {participantCount === 1 ? "viewer" : "viewers"}
+                {participantCount} {participantCount === 1 ? "viewer" : "viewers"}
               </p>
             </div>
-          ) : (
+          )}
+          {!isLive && (
             <p className="font-semibold text-xs text-muted-foreground">
               Offline
             </p>
