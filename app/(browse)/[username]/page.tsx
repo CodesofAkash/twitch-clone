@@ -4,6 +4,7 @@ import { isFollowingUser } from "@/lib/follow-service";
 import { isBlockedByUser } from "@/lib/block-service";
 import { StreamPlayer } from "@/components/stream-player";
 import { db } from "@/lib/db";
+import { getAllCategories } from "@/lib/category-service";
 
 import { Suspense } from "react";
 import { StreamPlayerSkeleton } from "@/components/stream-player";
@@ -52,6 +53,9 @@ const UserPage = async ({ params }: UserPageProps) => {
     notFound();
   }
 
+  // Fetch all categories for the selector
+  const categories = await getAllCategories();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "VideoObject",
@@ -83,6 +87,8 @@ const UserPage = async ({ params }: UserPageProps) => {
             ...streamWithDetails,
           }}
           isFollowing={isFollowing}
+          streamWithCategoryAndTags={streamWithDetails}
+          categories={categories}
         />
       </Suspense>
     </StreamPlayerErrorBoundary>

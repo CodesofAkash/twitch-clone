@@ -14,20 +14,32 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { updateStream } from "@/actions/stream";
+import { updateStream, updateStreamCategory, updateStreamTags } from "@/actions/stream";
 import { UploadDropzone } from "@/lib/uploadthing";
 import { Hint } from "@/components/hint";
 import { Trash } from "lucide-react";
 import Image from "next/image";
+import { CategorySelector } from "@/components/category-selector";
+import { TagInput } from "@/components/tag-input";
 
 interface InfoModalProps {
   initialName: string;
   initialThumbnailUrl: string | null;
+  initialCategoryId: string | null;
+  initialTags: string[];
+  categories: {
+    id: string;
+    name: string;
+    isPredefined?: boolean;
+  }[];
 }
 
 export const InfoModal = ({
   initialName,
   initialThumbnailUrl,
+  initialCategoryId,
+  initialTags,
+  categories = [],
 }: InfoModalProps) => {
   const router = useRouter();
   const closeRef = useRef<ElementRef<"button">>(null);
@@ -35,6 +47,8 @@ export const InfoModal = ({
 
   const [name, setName] = useState(initialName);
   const [thumbnailUrl, setThumbnailUrl] = useState(initialThumbnailUrl);
+  const [categoryId, setCategoryId] = useState(initialCategoryId || "");
+  const [tags, setTags] = useState<string[]>(initialTags);
 
   const onRemove = () => {
     startTransition(() => {
@@ -42,7 +56,7 @@ export const InfoModal = ({
         .then(() => {
           toast.success("Thumbnail removed");
           setThumbnailUrl("");
-          closeRef?.current?.click();
+          router.refresh();
         })
         .catch(() => toast.error("Something went wrong"));
     });
@@ -51,13 +65,51 @@ export const InfoModal = ({
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    startTransition(() => {
-      updateStream({ name: name })
-        .then(() => {
-          toast.success("Stream updated");
-          closeRef?.current?.click();
-        })
-        .catch(() => toast.error("Something went wrong"));
+    // Normalize empty values for proper comparison
+    const normalizedInitialCategory = initialCategoryId || "";
+    const normalizedCategory = categoryId || "";
+
+    // Check if anything actually changed
+    const nameChanged = name.trim() !== initialName;
+    const categoryChanged = normalizedCategory !== normalizedInitialCategory;
+    const tagsChanged = JSON.stringify(tags.sort()) !== JSON.stringify(initialTags.sort());
+
+    if (!nameChanged && !categoryChanged && !tagsChanged) {
+      toast.info("No changes to save");
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const updatePromises = [];
+
+        // Only update what changed
+        if (nameChanged) {
+          updatePromises.push(updateStream({ name: name.trim() }));
+        }
+        if (categoryChanged && normalizedCategory) {
+          updatePromises.push(updateStreamCategory(normalizedCategory));
+        }
+        if (tagsChanged) {
+          updatePromises.push(updateStreamTags(tags));
+        }
+
+        // Wait for all updates to complete
+        await Promise.all(updatePromises);
+        
+        // Close modal first for better UX
+        closeRef?.current?.click();
+        
+        // Refresh in background
+        router.refresh();
+        
+        // Small delay to ensure refresh starts before showing toast
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        toast.success("Stream updated");
+      } catch (error) {
+        toast.error("Something went wrong");
+      }
     });
   };
 
@@ -76,7 +128,8 @@ export const InfoModal = ({
         <DialogHeader>
           <DialogTitle>Edit stream info</DialogTitle>
         </DialogHeader>
-        <form onSubmit={onSubmit} className="space-y-14">
+        <form onSubmit={onSubmit} className="space-y-6">
+          {/* Name */}
           <div className="space-y-2">
             <Label>Name</Label>
             <Input
@@ -86,6 +139,24 @@ export const InfoModal = ({
               value={name}
             />
           </div>
+
+          {/* Category */}
+          <div className="space-y-2">
+            <Label>Category</Label>
+            <CategorySelector
+              categories={categories}
+              value={categoryId}
+              onChange={(newCategoryId) => setCategoryId(newCategoryId)}
+            />
+          </div>
+
+          {/* Tags */}
+          <div className="space-y-2">
+            <Label>Tags</Label>
+            <TagInput value={tags} onChange={setTags} maxTags={5} />
+          </div>
+
+          {/* Thumbnail */}
           <div className="space-y-2">
             <Label>Thumbnail</Label>
             {thumbnailUrl ? (
@@ -123,21 +194,24 @@ export const InfoModal = ({
                   }}
                   onClientUploadComplete={(res: { url: string }[]) => {
                     setThumbnailUrl(res?.[0]?.url);
-                    router.refresh();
-                    closeRef?.current?.click();
+                    updateStream({ thumbnailUrl: res?.[0]?.url }).then(() => {
+                      router.refresh();
+                    });
                   }}
                 />
               </div>
             )}
           </div>
+
+          {/* Actions */}
           <div className="flex justify-between">
             <DialogClose ref={closeRef} asChild>
-              <Button type="button" variant="ghost">
+              <Button type="button" variant="ghost" disabled={isPending}>
                 Cancel
               </Button>
             </DialogClose>
             <Button disabled={isPending} variant="primary" type="submit">
-              Save
+              {isPending ? "Saving..." : "Save"}
             </Button>
           </div>
         </form>

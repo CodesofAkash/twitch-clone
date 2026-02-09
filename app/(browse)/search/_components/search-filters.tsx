@@ -84,6 +84,8 @@ export const SearchFilters = ({
             <SelectValue placeholder="All Categories" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem> 
+            {/* add in service the feature to get from all categories and searching based on tags */}
             {categories.map((cat) => (
               <SelectItem key={cat.id} value={cat.slug}>
                 {cat.name}

@@ -3,7 +3,6 @@ import { getUserByUsername } from "@/lib/user-service";
 import { currentUser } from "@clerk/nextjs/server";
 import { getAllCategories } from "@/lib/category-service";
 import { db } from "@/lib/db";
-import { StreamInfoCard } from "../_components/stream-info-card";
 
 interface CreatorPageProps {
   params: Promise<{
@@ -14,7 +13,7 @@ interface CreatorPageProps {
 const CreatorPage = async ({ params }: CreatorPageProps) => {
   const externalUser = await currentUser();
   const { username } = await params;
-  
+
   // Get user with stream
   const user = await getUserByUsername(username);
 
@@ -22,8 +21,8 @@ const CreatorPage = async ({ params }: CreatorPageProps) => {
     throw new Error("Unauthorized");
   }
 
-  // Fetch stream with category and tags for settings
-  const stream = await db.stream.findUnique({
+  // Fetch stream with category and tags
+  const streamWithCategoryAndTags = await db.stream.findUnique({
     where: { userId: user.id },
     include: {
       category: true,
@@ -35,22 +34,29 @@ const CreatorPage = async ({ params }: CreatorPageProps) => {
     },
   });
 
-  // Fetch all categories for the selector
+  // Fetch all categories - THIS NOW RETURNS FULL CATEGORY OBJECTS
   const categories = await getAllCategories();
 
-  if (!stream) {
+  if (!streamWithCategoryAndTags) {
     throw new Error("Stream not found");
   }
 
+  // Map to simplified format for props
+  const simplifiedCategories = categories.map((cat) => ({
+    id: cat.id,
+    name: cat.name,
+    isPredefined: cat.isPredefined,
+  }));
+
   return (
     <div className="h-full">
-      {/* Stream Preview */}
-      <StreamPlayer user={user} stream={user.stream} isFollowing />
-
-      {/* Settings Section Below Stream */}
-      <div className="p-6">
-        <StreamInfoCard initialData={stream} categories={categories} />
-      </div>
+      <StreamPlayer
+        user={user}
+        stream={user.stream}
+        categories={simplifiedCategories}
+        streamWithCategoryAndTags={streamWithCategoryAndTags}
+        isFollowing
+      />
     </div>
   );
 };

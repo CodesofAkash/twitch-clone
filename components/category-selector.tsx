@@ -1,3 +1,4 @@
+// components/category-selector.tsx - FIXED
 "use client";
 
 import { useState } from "react";
@@ -16,12 +17,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Category } from "@prisma/client";
+
+// Simplified category type - only what we need
+interface SimpleCategory {
+  id: string;
+  name: string;
+  isPredefined?: boolean;
+}
 
 interface CategorySelectorProps {
-  categories: Category[];
+  categories: SimpleCategory[];
   value?: string;
-  onChange: (categoryId: string, categoryName: string) => void;
+  onChange: (categoryId: string) => void; // Simplified - just pass ID
 }
 
 export const CategorySelector = ({
@@ -32,24 +39,31 @@ export const CategorySelector = ({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  const selectedCategory = categories.find((cat) => cat.id === value);
+  const selectedCategory = categories?.find((cat) => cat.id === value);
+  
+  // Filter categories based on search
+  const filteredCategories = (categories || []).filter((cat) =>
+    cat.name.toLowerCase().includes(search.toLowerCase())
+  );
 
-  const handleSelect = (categoryId: string, categoryName: string) => {
-    onChange(categoryId, categoryName);
+  const handleSelect = (categoryId: string) => {
+    onChange(categoryId);
     setOpen(false);
   };
 
   const handleCreateCustom = () => {
     if (search.trim()) {
-      // Create custom category with the search term
-      onChange(search.trim(), search.trim());
-      setSearch("");
+      // Pass the name as ID for custom categories
+      // The backend will create it if it doesn't exist
+      onChange(search.trim());
       setOpen(false);
+      // Keep search to show what was selected until component re-renders
+      setTimeout(() => setSearch(""), 100);
     }
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} modal={true}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -57,58 +71,52 @@ export const CategorySelector = ({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {selectedCategory
-            ? selectedCategory.name
-            : "Select category..."}
+          {selectedCategory ? selectedCategory.name : (value ? value : "Select category...")}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
-        <Command>
+      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+        <Command shouldFilter={false}>
           <CommandInput
             placeholder="Search category..."
             value={search}
             onValueChange={setSearch}
           />
-          <CommandEmpty>
-            <div className="p-2">
-              <p className="text-sm text-muted-foreground mb-2">
-                No category found.
-              </p>
-              {search.trim() && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full"
-                  onClick={handleCreateCustom}
+          <CommandGroup className="max-h-[300px] overflow-y-auto">
+            {filteredCategories.length === 0 ? (
+              <div className="p-2">
+                <p className="text-sm text-muted-foreground mb-2">
+                  No category found.
+                </p>
+                {search.trim() && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={handleCreateCustom}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create &quot;{search}&quot;
+                  </Button>
+                )}
+              </div>
+            ) : (
+              filteredCategories.map((category) => (
+                <CommandItem
+                  key={category.id}
+                  value={category.id}
+                  onSelect={() => handleSelect(category.id)}
                 >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create &quot;{search}&quot;
-                </Button>
-              )}
-            </div>
-          </CommandEmpty>
-          <CommandGroup>
-            {categories.map((category) => (
-              <CommandItem
-                key={category.id}
-                value={category.name}
-                onSelect={() => handleSelect(category.id, category.name)}
-              >
-                <Check
-                  className={cn(
-                    "mr-2 h-4 w-4",
-                    value === category.id ? "opacity-100" : "opacity-0"
-                  )}
-                />
-                <div className="flex items-center gap-2">
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === category.id ? "opacity-100" : "opacity-0"
+                    )}
+                  />
                   <span>{category.name}</span>
-                  {!category.isPredefined && (
-                    <span className="text-xs text-muted-foreground">(Custom)</span>
-                  )}
-                </div>
-              </CommandItem>
-            ))}
+                </CommandItem>
+              ))
+            )}
           </CommandGroup>
         </Command>
       </PopoverContent>
