@@ -1,39 +1,48 @@
 "use client";
 
-import { LiveKitRoom } from "@livekit/components-react";
 import { useViewerToken } from "@/hooks/use-viewer-token";
-import { Video, VideoSkeleton } from "./video";
-import { useChatSidebar } from "@/store/use-chat-sidebar";
+import { LiveKitRoom } from "@livekit/components-react";
+
 import { cn } from "@/lib/utils";
+import { useChatSidebar } from "@/store/use-chat-sidebar";
+
+import { Video, VideoSkeleton } from "./video";
 import { Chat, ChatSkeleton } from "./chat";
 import { ChatToggle } from "./chat-toggle";
 import { Header, HeaderSkeleton } from "./header";
 import { InfoCard } from "./info-card";
 import { AboutCard } from "./about-card";
 
-type CustomStream = {
-  id: string;
-  isChatEnabled: boolean;
-  isChatDelayed: boolean;
-  isChatFollowersOnly: boolean;
-  isLive: boolean;
-  thumbnailUrl: string | null;
-  name: string;
-};
-
-type CustomUser = {
-  id: string;
-  username: string;
-  bio: string | null;
-  imageUrl: string;
-  externalUserId: string;
-  stream: CustomStream | null;
-  _count: { followers: number };
-};
+// UPDATE: Add category and tags to stream type
 
 interface StreamPlayerProps {
-  user: CustomUser;
-  stream: CustomStream;
+  user: {
+    id: string;
+    username: string;
+    imageUrl: string;
+    bio: string | null;
+    _count: {
+      followers: number;
+    };
+  };
+  stream: {
+    id: string;
+    name: string;
+    thumbnailUrl: string | null;
+    isLive: boolean;
+    isChatEnabled: boolean;
+    isChatDelayed: boolean;
+    isChatFollowersOnly: boolean;
+    // NEW: Add these optional fields
+    category?: {
+      name: string;
+    } | null;
+    tags?: {
+      tag: {
+        name: string;
+      };
+    }[];
+  };
   isFollowing: boolean;
 }
 
@@ -48,6 +57,10 @@ export const StreamPlayer = ({
   if (!token || !name || !identity) {
     return <StreamPlayerSkeleton />;
   }
+
+  // Extract category and tags
+  const categoryName = stream.category?.name || null;
+  const tagNames = stream.tags?.map((t) => t.tag.name) || [];
 
   return (
     <>
@@ -74,11 +87,14 @@ export const StreamPlayer = ({
             isFollowing={isFollowing}
             name={stream.name}
           />
+          {/* UPDATED: Pass category and tags */}
           <InfoCard
             hostIdentity={user.id}
             viewerIdentity={identity}
             name={stream.name}
             thumbnailUrl={stream.thumbnailUrl}
+            categoryName={categoryName}
+            tags={tagNames}
           />
           <AboutCard
             hostName={user.username}

@@ -1,52 +1,20 @@
-// app/(browse)/(home)/_components/categories.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getCategoriesWithStats } from "@/lib/category-service";
 
-const categories = [
-  {
-    name: "Just Chatting",
-    thumbnail: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&h=800&fit=crop",
-    viewers: "240K",
-  },
-  {
-    name: "VALORANT",
-    thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&h=800&fit=crop",
-    viewers: "74.3K",
-  },
-  {
-    name: "Counter-Strike",
-    thumbnail: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=600&h=800&fit=crop",
-    viewers: "437K",
-  },
-  {
-    name: "League of Legends",
-    thumbnail: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=800&fit=crop",
-    viewers: "133K",
-  },
-  {
-    name: "Minecraft",
-    thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&h=800&fit=crop",
-    viewers: "30.9K",
-  },
-  {
-    name: "Art",
-    thumbnail: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&h=800&fit=crop",
-    viewers: "41.3K",
-  },
-  {
-    name: "Music",
-    thumbnail: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=800&fit=crop",
-    viewers: "16K",
-  },
-  {
-    name: "Cooking",
-    thumbnail: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600&h=800&fit=crop",
-    viewers: "95.4K",
-  },
-];
+export const Categories = async () => {
+  // Fetch categories from database with live viewer counts
+  const categories = await getCategoriesWithStats();
 
-export const Categories = () => {
+  // Only show categories that have streams
+  const activeCategories = categories.filter((cat) => cat.streamCount > 0);
+
+  // Sort by viewer count and take top 8
+  const topCategories = activeCategories
+    .sort((a, b) => b.viewerCount - a.viewerCount)
+    .slice(0, 8);
+
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -59,29 +27,42 @@ export const Categories = () => {
         </Link>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
-        {categories.map((category) => (
+        {topCategories.map((category) => (
           <Link
-            key={category.name}
-            href={`/search?category=${category.name.toLowerCase()}`}
+            key={category.id}
+            href={`/search?category=${category.slug}`}
             className="group"
           >
             <div className="relative aspect-[3/4] rounded-lg overflow-hidden mb-2">
               <Image
-                src={category.thumbnail}
+                src={category.imageUrl}
                 alt={category.name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform"
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                unoptimized
               />
             </div>
             <div>
               <p className="font-semibold truncate group-hover:text-primary">
                 {category.name}
               </p>
-              <p className="text-sm text-muted-foreground">{category.viewers} viewers</p>
+              <p className="text-sm text-muted-foreground">
+                {category.viewerCount > 0
+                  ? `${category.viewerCount.toLocaleString()} viewers`
+                  : `${category.streamCount} ${category.streamCount === 1 ? "channel" : "channels"}`
+                }
+              </p>
             </div>
           </Link>
         ))}
       </div>
+
+      {topCategories.length === 0 && (
+        <p className="text-center text-muted-foreground py-8">
+          No active categories right now
+        </p>
+      )}
     </div>
   );
 };

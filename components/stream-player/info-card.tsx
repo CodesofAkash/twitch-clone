@@ -2,6 +2,7 @@
 
 import { Pencil } from "lucide-react";
 import Image from "next/image";
+
 import { Separator } from "@/components/ui/separator";
 import { InfoModal } from "./info-modal";
 
@@ -10,6 +11,9 @@ interface InfoCardProps {
   viewerIdentity: string;
   name: string;
   thumbnailUrl: string | null;
+  // NEW: Add these props
+  categoryName?: string | null;
+  tags?: string[];
 }
 
 export const InfoCard = ({
@@ -17,6 +21,8 @@ export const InfoCard = ({
   viewerIdentity,
   name,
   thumbnailUrl,
+  categoryName,
+  tags = [],
 }: InfoCardProps) => {
   const hostAsViewer = `host-${hostIdentity}`;
   const isHost = viewerIdentity === hostAsViewer;
@@ -27,7 +33,7 @@ export const InfoCard = ({
     <div className="px-4">
       <div className="rounded-xl bg-background">
         <div className="flex items-center gap-x-2.5 p-4">
-          <div className="rounded-md bg-blue-600 p-2 h-auto w-auto">
+          <div className="rounded-md bg-primary p-2 h-auto w-auto">
             <Pencil className="h-5 w-5" />
           </div>
           <div>
@@ -46,6 +52,32 @@ export const InfoCard = ({
             <h3 className="text-sm text-muted-foreground mb-2">Name</h3>
             <p className="text-sm font-semibold">{name}</p>
           </div>
+
+          {/* NEW: Category Display */}
+          {categoryName && (
+            <div>
+              <h3 className="text-sm text-muted-foreground mb-2">Category</h3>
+              <p className="text-sm font-semibold">{categoryName}</p>
+            </div>
+          )}
+
+          {/* NEW: Tags Display */}
+          {tags.length > 0 && (
+            <div>
+              <h3 className="text-sm text-muted-foreground mb-2">Tags</h3>
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs bg-accent text-accent-foreground px-2.5 py-1 rounded-md font-medium"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div>
             <h3 className="text-sm text-muted-foreground mb-2">Thumbnail</h3>
             {thumbnailUrl && (

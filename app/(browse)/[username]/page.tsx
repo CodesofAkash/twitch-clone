@@ -3,6 +3,8 @@ import { getUserByUsername } from "@/lib/user-service";
 import { isFollowingUser } from "@/lib/follow-service";
 import { isBlockedByUser } from "@/lib/block-service";
 import { StreamPlayer } from "@/components/stream-player";
+import { db } from "@/lib/db";
+
 import { Suspense } from "react";
 import { StreamPlayerSkeleton } from "@/components/stream-player";
 import { StreamPlayerErrorBoundary } from "@/components/stream-player/error-boundary";
@@ -13,8 +15,6 @@ interface UserPageProps {
   }>;
 }
 
-export const revalidate = 300;
-
 const UserPage = async ({ params }: UserPageProps) => {
   const { username } = await params;
   const user = await getUserByUsername(username);
@@ -22,6 +22,28 @@ const UserPage = async ({ params }: UserPageProps) => {
   if (!user || !user.stream) {
     notFound();
   }
+
+  // Fetch stream with category and tags
+  const streamWithDetails = await db.stream.findUnique({
+    where: { id: user.stream.id },
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+      tags: {
+        include: {
+          tag: {
+            select: {
+              name: true,
+            },
+          },
+        },
+        take: 5,
+      },
+    },
+  });
 
   const isFollowing = await isFollowingUser(user.id);
   const isBlocked = await isBlockedByUser(user.id);
@@ -49,9 +71,22 @@ const UserPage = async ({ params }: UserPageProps) => {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <StreamPlayer user={user} stream={user.stream} isFollowing={isFollowing} />
+        <StreamPlayer
+          user={{
+            ...user,
+            _count: {
+              followers: user._count.followers,
+            },
+          }}
+          stream={{
+            ...user.stream,
+            ...streamWithDetails,
+          }}
+          isFollowing={isFollowing}
+        />
       </Suspense>
     </StreamPlayerErrorBoundary>
+    
   );
 };
 
