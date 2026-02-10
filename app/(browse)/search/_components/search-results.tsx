@@ -102,7 +102,7 @@ export const SearchResults = ({
   return (
     <div>
       {isPending && (
-        <div className="fixed top-4 right-4 z-50 bg-background border rounded-lg p-3 shadow-lg">
+        <div className="fixed top-28 right-28 z-50 bg-background border rounded-lg p-3 shadow-lg">
           <div className="flex items-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin" />
             <span className="text-sm">Searching...</span>
