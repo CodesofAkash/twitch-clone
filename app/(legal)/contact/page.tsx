@@ -1,9 +1,10 @@
 import { Metadata } from "next";
-import { Mail, MessageSquare, Github } from "lucide-react";
+import { Mail, MessageSquare, Github, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
   title: "Contact Us | StreamHub",
@@ -12,62 +13,116 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-4xl font-bold mb-2">Contact Us</h1>
-      <p className="text-muted-foreground mb-8">
-        Have a question or feedback? We&apos;d love to hear from you.
-      </p>
-
-      <div className="grid md:grid-cols-3 gap-6 mb-12">
-        <div className="flex flex-col items-center text-center p-6 border rounded-lg">
-          <Mail className="h-8 w-8 mb-3 text-primary" />
-          <h3 className="font-semibold mb-1">Email</h3>
-          <p className="text-sm text-muted-foreground">support@streamhub.com</p>
+    <div className="space-y-12">
+      {/* Hero */}
+      <div className="text-center space-y-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+          <Send className="w-8 h-8 text-primary" />
         </div>
-
-        <div className="flex flex-col items-center text-center p-6 border rounded-lg">
-          <MessageSquare className="h-8 w-8 mb-3 text-primary" />
-          <h3 className="font-semibold mb-1">Discord</h3>
-          <p className="text-sm text-muted-foreground">Join our community</p>
-        </div>
-
-        <div className="flex flex-col items-center text-center p-6 border rounded-lg">
-          <Github className="h-8 w-8 mb-3 text-primary" />
-          <h3 className="font-semibold mb-1">GitHub</h3>
-          <p className="text-sm text-muted-foreground">Report issues</p>
-        </div>
+        <h1 className="text-4xl font-bold">Get in Touch</h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Have a question, feedback, or just want to say hi? We&apos;d love to hear from you!
+        </p>
       </div>
 
-      <form className="space-y-6">
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="Your name" />
-          </div>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" />
-          </div>
-        </div>
+      {/* Contact Methods */}
+      <div className="grid md:grid-cols-3 gap-6">
+        <Card className="hover:border-primary/50 transition-all hover:shadow-md">
+          <CardHeader className="text-center">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mx-auto mb-4">
+              <Mail className="w-6 h-6 text-primary" />
+            </div>
+            <CardTitle>Email Us</CardTitle>
+            <CardDescription>Get a response within 24 hours</CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <a
+              href="mailto:support@streamhub.com"
+              className="text-primary hover:underline font-medium"
+            >
+              support@streamhub.com
+            </a>
+          </CardContent>
+        </Card>
 
-        <div>
-          <Label htmlFor="subject">Subject</Label>
-          <Input id="subject" placeholder="How can we help?" />
-        </div>
+        <Card className="hover:border-primary/50 transition-all hover:shadow-md">
+          <CardHeader className="text-center">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mx-auto mb-4">
+              <MessageSquare className="w-6 h-6 text-primary" />
+            </div>
+            <CardTitle>Discord Community</CardTitle>
+            <CardDescription>Join our community server</CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <Button variant="outline" asChild className="w-full">
+              <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
+                Join Discord
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
 
-        <div>
-          <Label htmlFor="message">Message</Label>
-          <Textarea
-            id="message"
-            placeholder="Tell us more..."
-            rows={6}
-          />
-        </div>
+        <Card className="hover:border-primary/50 transition-all hover:shadow-md">
+          <CardHeader className="text-center">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mx-auto mb-4">
+              <Github className="w-6 h-6 text-primary" />
+            </div>
+            <CardTitle>GitHub Issues</CardTitle>
+            <CardDescription>Report bugs or suggest features</CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <Button variant="outline" asChild className="w-full">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                Open Issue
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
 
-        <Button type="submit" className="w-full">
-          Send Message
-        </Button>
-      </form>
+      {/* Contact Form */}
+      <Card className="max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl">Send us a Message</CardTitle>
+          <CardDescription>
+            Fill out the form below and we&apos;ll get back to you as soon as possible
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Name *</Label>
+                <Input id="name" placeholder="Your name" className="h-11" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email *</Label>
+                <Input id="email" type="email" placeholder="you@example.com" className="h-11" />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="subject">Subject *</Label>
+              <Input id="subject" placeholder="How can we help?" className="h-11" />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="message">Message *</Label>
+              <Textarea
+                id="message"
+                placeholder="Tell us more..."
+                rows={6}
+                className="resize-none"
+              />
+            </div>
+
+            <Button type="submit" className="w-full h-11" size="lg">
+              <Send className="mr-2 h-4 w-4" />
+              Send Message
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

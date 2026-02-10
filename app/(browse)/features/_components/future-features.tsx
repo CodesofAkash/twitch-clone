@@ -1,57 +1,92 @@
 import { futureFeatures } from "@/lib/features-data";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Code, Lightbulb } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Clock, Zap, Lightbulb } from "lucide-react";
 
-const priorityIcons = {
-  High: Clock,
-  Medium: Code,
-  Future: Lightbulb,
+const priorityConfig = {
+  High: {
+    icon: Clock,
+    color: "text-red-500",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
+  },
+  Medium: {
+    icon: Zap,
+    color: "text-yellow-500",
+    bgColor: "bg-yellow-500/10",
+    borderColor: "border-yellow-500/20",
+  },
+  Future: {
+    icon: Lightbulb,
+    color: "text-blue-500",
+    bgColor: "bg-blue-500/10",
+    borderColor: "border-blue-500/20",
+  },
 };
 
-const statusColors = {
-  "In Progress": "bg-green-500/10 text-green-500 border-green-500/20",
-  Planned: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  Research: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-  Future: "bg-purple-500/10 text-purple-500 border-purple-500/20",
+const statusConfig = {
+  "In Progress": "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30",
+  Planned: "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30",
+  Research: "bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30",
+  Future: "bg-gray-500/15 text-gray-600 dark:text-gray-400 border-gray-500/30",
 };
 
 export const FutureFeatures = () => {
   return (
-    <section className="mb-16">
-      <h2 className="text-3xl font-bold mb-8">Roadmap</h2>
+    <section className="mb-20">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold mb-3">Coming Soon</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto">
+          Exciting features we&apos;re working on to make StreamHub even better
+        </p>
+      </div>
       
-      <div className="space-y-8">
+      <div className="space-y-12">
         {futureFeatures.map((priorityGroup) => {
-          const Icon = priorityIcons[priorityGroup.priority as keyof typeof priorityIcons];
+          const config = priorityConfig[priorityGroup.priority as keyof typeof priorityConfig];
+          const Icon = config.icon;
           
           return (
             <div key={priorityGroup.priority}>
-              <div className="flex items-center gap-2 mb-4">
-                <Icon className="h-5 w-5 text-primary" />
-                <h3 className="text-xl font-semibold">
-                  {priorityGroup.priority} Priority
-                </h3>
+              <div className="flex items-center gap-3 mb-6">
+                <div className={`p-2 rounded-lg ${config.bgColor}`}>
+                  <Icon className={`w-5 h-5 ${config.color}`} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">
+                    {priorityGroup.priority} Priority
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {priorityGroup.priority === "High" && "Actively working on these"}
+                    {priorityGroup.priority === "Medium" && "Next on our roadmap"}
+                    {priorityGroup.priority === "Future" && "Long-term vision"}
+                  </p>
+                </div>
               </div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {priorityGroup.features.map((feature) => (
-                  <div
+                  <Card
                     key={feature.name}
-                    className="border rounded-lg p-4 hover:border-primary/50 transition"
+                    className="border-muted hover:border-primary/50 transition-all hover:shadow-md group"
                   >
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold">{feature.name}</h4>
-                      <Badge
-                        variant="outline"
-                        className={statusColors[feature.status as keyof typeof statusColors]}
-                      >
-                        {feature.status}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {feature.description}
-                    </p>
-                  </div>
+                    <CardHeader>
+                      <div className="flex justify-between items-start mb-2">
+                        <CardTitle className="text-base group-hover:text-primary transition-colors">
+                          {feature.name}
+                        </CardTitle>
+                        <Badge
+                          variant="outline"
+                          className={`text-xs ${statusConfig[feature.status as keyof typeof statusConfig]}`}
+                        >
+                          {feature.status}
+                        </Badge>
+                      </div>
+                      <CardDescription className="text-xs leading-relaxed">
+                        {feature.description}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
                 ))}
               </div>
             </div>

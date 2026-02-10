@@ -20,60 +20,64 @@ interface ResultCardProps {
 
 export const ResultCard = ({ data }: ResultCardProps) => {
   return (
-    <Link href={`/${data.user.username}`}>
-      <div className="w-full space-y-3 group">
+    <div className="w-full space-y-3 group">
+      {/* Main Link - Only wraps thumbnail and user info */}
+      <Link href={`/${data.user.username}`}>
         <Thumbnail
           src={data.thumbnailUrl}
           fallback={data.user.imageUrl}
           isLive={data.isLive}
           username={data.user.username}
         />
+      </Link>
 
-        <div className="flex gap-x-3">
+      <div className="flex gap-x-3">
+        <Link href={`/${data.user.username}`}>
           <UserAvatar
             username={data.user.username}
             imageUrl={data.user.imageUrl}
             isLive={data.isLive}
           />
+        </Link>
 
-          <div className="flex flex-col text-sm overflow-hidden flex-1">
+        <div className="flex flex-col text-sm overflow-hidden flex-1">
+          <Link href={`/${data.user.username}`}>
             <p className="truncate font-semibold hover:text-primary transition">
               {data.name}
             </p>
+          </Link>
 
-            <p className="text-muted-foreground text-sm">{data.user.username}</p>
+          <p className="text-muted-foreground text-sm">{data.user.username}</p>
 
-            {data.categoryName && (
-              <p className="text-xs text-muted-foreground truncate">
-                {data.categoryName}
-              </p>
-            )}
+          {data.categoryName && (
+            <p className="text-xs text-muted-foreground truncate">
+              {data.categoryName}
+            </p>
+          )}
 
-            {data.isLive && data.viewerCount > 0 && (
-              <p className="text-xs text-red-500 font-medium">
-                {data.viewerCount.toLocaleString()} viewers
-              </p>
-            )}
+          {data.isLive && data.viewerCount > 0 && (
+            <p className="text-xs text-red-500 font-medium">
+              {data.viewerCount.toLocaleString()} viewers
+            </p>
+          )}
 
-            {/* CLICKABLE TAGS - Redirect to search */}
-            {data.tagNames && data.tagNames.length > 0 && (
-              <div className="flex gap-1 mt-1 flex-wrap" onClick={(e) => e.stopPropagation()}>
-                {data.tagNames.slice(0, 2).map((tag) => (
-                  <Link
-                    key={tag}
-                    href={`/search?tag=${encodeURIComponent(tag)}`}
-                    className="text-xs bg-accent text-accent-foreground px-1.5 py-0.5 rounded hover:bg-accent/80 transition"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {tag}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* CLICKABLE TAGS - No longer nested in Link */}
+          {data.tagNames && data.tagNames.length > 0 && (
+            <div className="flex gap-1 mt-1 flex-wrap">
+              {data.tagNames.slice(0, 2).map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/search?tag=${encodeURIComponent(tag)}`}
+                  className="text-xs bg-accent text-accent-foreground px-1.5 py-0.5 rounded hover:bg-accent/80 transition"
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
