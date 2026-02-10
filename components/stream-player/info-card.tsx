@@ -1,7 +1,7 @@
 "use client";
 
 import { Pencil } from "lucide-react";
-import Image from "next/image";
+import { SafeImage } from "@/components/safe-image";
 import { Separator } from "@/components/ui/separator";
 import { InfoModal } from "./info-modal";
 
@@ -37,13 +37,13 @@ export const InfoCard = ({
   const tags = streamWithCategoryAndTags?.tags?.map((t: any) => t.tag.name) || [];
 
   return (
-    <div className="px-4">
+    <div className="px-2 sm:px-4">
       <div className="rounded-xl bg-background">
-        <div className="flex items-center gap-x-2.5 p-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-2.5 p-3 sm:p-4">
           <div className="rounded-md bg-blue-600 p-2 h-auto w-auto">
-            <Pencil className="h-5 w-5" />
+            <Pencil className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div>
+          <div className="flex-1">
             <h2 className="text-sm lg:text-lg font-semibold capitalize">
               Edit your stream info
             </h2>
@@ -61,17 +61,17 @@ export const InfoCard = ({
           />
         </div>
         <Separator />
-        <div className="p-4 lg:p-6 space-y-4">
+        <div className="p-3 sm:p-4 lg:p-6 space-y-3 sm:space-y-4">
           <div>
             <h3 className="text-sm text-muted-foreground mb-2">Name</h3>
-            <p className="text-sm font-semibold">{name}</p>
+            <p className="text-sm font-semibold break-words">{name}</p>
           </div>
 
           {/* Category Display */}
           {categoryName && (
             <div>
               <h3 className="text-sm text-muted-foreground mb-2">Category</h3>
-              <p className="text-sm font-semibold">{categoryName}</p>
+              <p className="text-sm font-semibold break-words">{categoryName}</p>
             </div>
           )}
 
@@ -95,8 +95,8 @@ export const InfoCard = ({
           <div>
             <h3 className="text-sm text-muted-foreground mb-2">Thumbnail</h3>
             {thumbnailUrl && (
-              <div className="relative aspect-video rounded-md overflow-hidden w-[200px] border border-white/10">
-                <Image
+              <div className="relative aspect-video rounded-md overflow-hidden w-full sm:w-[200px] max-w-full border border-white/10">
+                <SafeImage
                   fill
                   src={thumbnailUrl}
                   alt={name}

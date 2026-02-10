@@ -72,7 +72,7 @@ export const Actions = ({
       <Heart
         className={cn("h-4 w-4 mr-2", isFollowing ? "fill-white" : "fill-none")}
       />
-      {isFollowing ? "Unfollow" : "Follow"}
+      {isPending ? "Loading..." : isFollowing ? "Unfollow" : "Follow"}
     </Button>
   );
 };

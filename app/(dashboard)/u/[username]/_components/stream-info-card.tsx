@@ -4,7 +4,7 @@ import { useState, useTransition, ElementRef, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Pencil } from "lucide-react";
-import Image from "next/image";
+import { SafeImage } from "@/components/safe-image";
 
 import { updateStream, updateStreamCategory, updateStreamTags } from "@/actions/stream";
 import { UploadDropzone } from "@/lib/uploadthing";
@@ -92,12 +92,12 @@ export const StreamInfoCard = ({
 
   return (
     <div className="bg-background">
-      <div className="rounded-xl bg-muted p-6">
-        <div className="flex items-center gap-x-2.5 mb-4">
+      <div className="rounded-xl bg-muted p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-x-2.5 mb-4">
           <div className="rounded-md bg-primary p-2 h-auto w-auto">
-            <Pencil className="h-5 w-5" />
+            <Pencil className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div>
+          <div className="flex-1">
             <h2 className="text-sm lg:text-lg font-semibold capitalize">
               Edit stream info
             </h2>
@@ -107,7 +107,7 @@ export const StreamInfoCard = ({
           </div>
         </div>
         
-        <form onSubmit={onSubmit} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-4 sm:space-y-6">
           <div>
             <Label>Name</Label>
             <Input
@@ -143,8 +143,8 @@ export const StreamInfoCard = ({
           <div>
             <Label>Thumbnail</Label>
             {initialData?.thumbnailUrl && (
-              <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 mb-4">
-                <Image
+              <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 mb-4 max-w-full sm:max-w-md">
+                <SafeImage
                   fill
                   alt="Thumbnail"
                   src={initialData.thumbnailUrl}
@@ -152,7 +152,7 @@ export const StreamInfoCard = ({
                 />
               </div>
             )}
-            <div className="rounded-xl border outline-dashed outline-muted">
+            <div className="rounded-xl border outline-dashed outline-muted max-w-full">
               <UploadDropzone
                 endpoint="thumbnailUploader"
                 appearance={{
@@ -166,6 +166,10 @@ export const StreamInfoCard = ({
                 onClientUploadComplete={(res) => {
                   onChange(res?.[0]?.url);
                   router.refresh();
+                }}
+                onUploadError={(error: Error) => {
+                  console.error("Upload error:", error);
+                  toast.error(error.message || "Failed to upload thumbnail. Please check file size and format.");
                 }}
               />
             </div>
@@ -185,7 +189,7 @@ export const StreamInfoCard = ({
               type="submit"
               variant="primary"
             >
-              Save
+              {isPending ? "Saving..." : "Save"}
             </Button>
           </div>
         </form>

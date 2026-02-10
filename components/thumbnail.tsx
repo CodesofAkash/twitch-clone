@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SafeImage } from "@/components/safe-image";
 import { UserAvatar } from "@/components/user-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LiveBadge } from "@/components/live-badge";
@@ -32,14 +32,14 @@ export const Thumbnail = ({
     );
   } else {
     content = (
-      <Image
+      <SafeImage
         src={src}
         fill
         alt={username}
         className="object-cover transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 rounded-md"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         priority={false}
-        unoptimized // Prevents 404 errors with dynamic URLs
+        unoptimized
       />
     );
   }

@@ -79,10 +79,10 @@ export const ConnectModal = () => {
         </Alert>
         <div className="flex justify-between">
           <DialogClose ref={closeRef} asChild>
-            <Button variant="ghost">Cancel</Button>
+            <Button variant="ghost" disabled={isPending}>Cancel</Button>
           </DialogClose>
           <Button disabled={isPending} onClick={onSubmit} variant="primary">
-            Generate
+            {isPending ? "Generating..." : "Generate"}
           </Button>
         </div>
       </DialogContent>

@@ -38,6 +38,7 @@ export const ToggleCard = ({field, label, value = false}: ToggleCardProps) => {
                     disabled={isPending}
                     onCheckedChange={onChange}
                         checked={value}
+                        style={{ opacity: isPending ? 0.5 : 1 }}
                     >
                         {value ? "On" : "Off"}
                     </Switch>

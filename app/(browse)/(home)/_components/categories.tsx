@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SafeImage } from "@/components/safe-image";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCategoriesWithStats } from "@/lib/category-service";
@@ -34,7 +34,7 @@ export const Categories = async () => {
             className="group"
           >
             <div className="relative aspect-[3/4] rounded-lg overflow-hidden mb-2">
-              <Image
+              <SafeImage
                 src={category.imageUrl}
                 alt={category.name}
                 fill

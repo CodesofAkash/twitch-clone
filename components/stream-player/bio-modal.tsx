@@ -57,12 +57,12 @@ export const BioModal = ({ initialValue }: BioModalProps) => {
           />
           <div className="flex justify-between">
             <DialogClose ref={closeRef} asChild>
-              <Button type="button" variant="ghost">
+              <Button type="button" variant="ghost" disabled={isPending}>
                 Cancel
               </Button>
             </DialogClose>
             <Button disabled={isPending} type="submit" variant="primary">
-              Save
+              {isPending ? "Saving..." : "Save"}
             </Button>
           </div>
         </form>

@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { contentConfig } from "@/lib/content-config";
 
 import { Toaster } from 'sonner'
+import { OfflineIndicator } from "@/components/offline-indicator";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Toaster theme="light" position="bottom-center" />
+            <OfflineIndicator />
             {children}
           </ThemeProvider>
         </body>
