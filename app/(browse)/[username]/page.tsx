@@ -5,6 +5,7 @@ import { isBlockedByUser } from "@/lib/block-service";
 import { StreamPlayer } from "@/components/stream-player";
 import { db } from "@/lib/db";
 import { getAllCategories } from "@/lib/category-service";
+import { contentConfig } from "@/lib/content-config";
 
 import { Suspense } from "react";
 import { StreamPlayerSkeleton } from "@/components/stream-player";
@@ -63,8 +64,8 @@ const UserPage = async ({ params }: UserPageProps) => {
     description: user.bio || `Live stream by ${user.username}`,
     thumbnailUrl: user.stream?.thumbnailUrl || user.imageUrl,
     uploadDate: user.stream?.createdAt?.toISOString(),
-    contentUrl: `https://twitch-clone--codesofakash.vercel.app/${user.username}`,
-    embedUrl: `https://twitch-clone--codesofakash.vercel.app/${user.username}`,
+    contentUrl: `${contentConfig.project.baseUrl}/${user.username}`,
+    embedUrl: `${contentConfig.project.baseUrl}/${user.username}`,
     isLiveBroadcast: user.stream?.isLive,
   };
 
@@ -115,7 +116,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${user.username} - Live on Twitch Clone`,
+    title: `${user.username} - Live on OpenStream`,
     description: user.bio || `Watch ${user.username}'s live stream`,
     openGraph: {
       title: `${user.username} - Live Stream`,

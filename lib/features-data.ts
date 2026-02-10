@@ -71,8 +71,8 @@ export const futureFeatures = [
         status: "Planned",
       },
       {
-        name: "Clips System",
-        description: "Create and share 30-60s highlights",
+        name: "Ingress Handling Improvements",
+        description: "Advanced stream ingress management with paid plan support",
         status: "In Progress",
       },
       {

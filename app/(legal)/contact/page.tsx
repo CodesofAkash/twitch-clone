@@ -5,13 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { contentConfig } from "@/lib/content-config";
 
 export const metadata: Metadata = {
-  title: "Contact Us | StreamHub",
-  description: "Get in touch with the StreamHub team",
+  title: contentConfig.contact.title,
+  description: contentConfig.contact.description,
 };
 
 export default function ContactPage() {
+  const { contact, project } = contentConfig;
   return (
     <div className="space-y-12">
       {/* Hero */}
@@ -19,9 +21,9 @@ export default function ContactPage() {
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
           <Send className="w-8 h-8 text-primary" />
         </div>
-        <h1 className="text-4xl font-bold">Get in Touch</h1>
+        <h1 className="text-4xl font-bold">{contact.hero.title}</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Have a question, feedback, or just want to say hi? We&apos;d love to hear from you!
+          {contact.hero.subtitle}
         </p>
       </div>
 
@@ -32,15 +34,15 @@ export default function ContactPage() {
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mx-auto mb-4">
               <Mail className="w-6 h-6 text-primary" />
             </div>
-            <CardTitle>Email Us</CardTitle>
-            <CardDescription>Get a response within 24 hours</CardDescription>
+            <CardTitle>{contact.methods[0].title}</CardTitle>
+            <CardDescription>{contact.methods[0].description}</CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <a
-              href="mailto:support@streamhub.com"
+              href={contact.methods[0].link}
               className="text-primary hover:underline font-medium"
             >
-              support@streamhub.com
+              {contact.methods[0].linkText}
             </a>
           </CardContent>
         </Card>
@@ -50,13 +52,13 @@ export default function ContactPage() {
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mx-auto mb-4">
               <MessageSquare className="w-6 h-6 text-primary" />
             </div>
-            <CardTitle>Discord Community</CardTitle>
-            <CardDescription>Join our community server</CardDescription>
+            <CardTitle>{contact.methods[1].title}</CardTitle>
+            <CardDescription>{contact.methods[1].description}</CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <Button variant="outline" asChild className="w-full">
-              <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
-                Join Discord
+              <a href={contact.methods[1].link} target="_blank" rel="noopener noreferrer">
+                {contact.methods[1].buttonText}
               </a>
             </Button>
           </CardContent>
@@ -67,13 +69,13 @@ export default function ContactPage() {
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mx-auto mb-4">
               <Github className="w-6 h-6 text-primary" />
             </div>
-            <CardTitle>GitHub Issues</CardTitle>
-            <CardDescription>Report bugs or suggest features</CardDescription>
+            <CardTitle>{contact.methods[2].title}</CardTitle>
+            <CardDescription>{contact.methods[2].description}</CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <Button variant="outline" asChild className="w-full">
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-                Open Issue
+              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                {contact.methods[2].buttonText}
               </a>
             </Button>
           </CardContent>
@@ -83,42 +85,40 @@ export default function ContactPage() {
       {/* Contact Form */}
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-2xl">Send us a Message</CardTitle>
-          <CardDescription>
-            Fill out the form below and we&apos;ll get back to you as soon as possible
-          </CardDescription>
+          <CardTitle className="text-2xl">{contact.form.title}</CardTitle>
+          <CardDescription>{contact.form.description}</CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-6">
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name *</Label>
-                <Input id="name" placeholder="Your name" className="h-11" />
+                <Label htmlFor="name">{contact.form.fields.name.label} *</Label>
+                <Input id="name" placeholder={contact.form.fields.name.placeholder} className="h-11" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email *</Label>
-                <Input id="email" type="email" placeholder="you@example.com" className="h-11" />
+                <Label htmlFor="email">{contact.form.fields.email.label} *</Label>
+                <Input id="email" type="email" placeholder={contact.form.fields.email.placeholder} className="h-11" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="subject">Subject *</Label>
-              <Input id="subject" placeholder="How can we help?" className="h-11" />
+              <Label htmlFor="subject">{contact.form.fields.subject.label} *</Label>
+              <Input id="subject" placeholder={contact.form.fields.subject.placeholder} className="h-11" />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="message">Message *</Label>
+              <Label htmlFor="message">{contact.form.fields.message.label} *</Label>
               <Textarea
                 id="message"
-                placeholder="Tell us more..."
-                rows={6}
+                placeholder={contact.form.fields.message.placeholder}
+                rows={contact.form.fields.message.rows}
                 className="resize-none"
               />
             </div>
 
             <Button type="submit" className="w-full h-11" size="lg">
               <Send className="mr-2 h-4 w-4" />
-              Send Message
+              {contact.form.submitButton}
             </Button>
           </form>
         </CardContent>

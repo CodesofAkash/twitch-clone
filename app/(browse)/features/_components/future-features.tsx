@@ -1,4 +1,5 @@
 import { futureFeatures } from "@/lib/features-data";
+import { contentConfig } from "@/lib/content-config";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Clock, Zap, Lightbulb } from "lucide-react";
@@ -32,12 +33,14 @@ const statusConfig = {
 };
 
 export const FutureFeatures = () => {
+  const { features } = contentConfig;
+
   return (
     <section className="mb-20">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold mb-3">Coming Soon</h2>
+        <h2 className="text-3xl font-bold mb-3">{features.futureFeatures.title}</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Exciting features we&apos;re working on to make StreamHub even better
+          {features.futureFeatures.subtitle}
         </p>
       </div>
       
@@ -57,9 +60,7 @@ export const FutureFeatures = () => {
                     {priorityGroup.priority} Priority
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    {priorityGroup.priority === "High" && "Actively working on these"}
-                    {priorityGroup.priority === "Medium" && "Next on our roadmap"}
-                    {priorityGroup.priority === "Future" && "Long-term vision"}
+                    {features.futureFeatures.priorities[priorityGroup.priority as keyof typeof features.futureFeatures.priorities]}
                   </p>
                 </div>
               </div>

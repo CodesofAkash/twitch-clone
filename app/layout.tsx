@@ -7,6 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { contentConfig } from "@/lib/content-config";
 
 import { Toaster } from 'sonner'
 
@@ -34,7 +35,7 @@ export default function RootLayout({
           <ThemeProvider
             attribute="class"
             forcedTheme="dark"
-            storageKey="twitch-theme"
+            storageKey="open-stream-theme"
             disableTransitionOnChange
           >
             <Toaster theme="light" position="bottom-center" />
@@ -51,8 +52,8 @@ export default function RootLayout({
 
 export const metadata: Metadata = {
   title: {
-    default: "Twitch Clone - Live Streaming Platform",
-    template: "%s | Twitch Clone",
+    default: "OpenStream - Live Streaming Platform",
+    template: "%s | OpenStream",
   },
   description: "Watch live streams, interact with your favorite creators, and join a thriving community",
   keywords: ["streaming", "live", "gaming", "entertainment", "community"],
@@ -61,14 +62,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://twitch-clone--codesofakash.vercel.app",
-    siteName: "Twitch Clone",
-    title: "Twitch Clone - Live Streaming Platform",
+    url: contentConfig.project.baseUrl,
+    siteName: "OpenStream",
+    title: "OpenStream - Live Streaming Platform",
     description: "Watch live streams and interact with creators",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Twitch Clone",
+    title: "OpenStream",
     description: "Live streaming platform",
     creator: "@CodesOfAkash",
   },

@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { contentConfig } from "@/lib/content-config";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -9,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/u/", "/api/", "/sign-in", "/sign-up"],
       },
     ],
-    sitemap: "https://twitch-clone--codesofakash.vercel.app/sitemap.xml",
+    sitemap: `${contentConfig.project.baseUrl}/sitemap.xml`,
   };
 }

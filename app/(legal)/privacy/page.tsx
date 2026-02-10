@@ -2,13 +2,15 @@ import { Metadata } from "next";
 import { Shield, Lock, Eye, FileText, Mail } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { contentConfig } from "@/lib/content-config";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | StreamHub",
-  description: "How we handle and protect your personal information",
+  title: contentConfig.privacy.title,
+  description: contentConfig.privacy.description,
 };
 
 export default function PrivacyPage() {
+  const { privacy, project } = contentConfig;
   return (
     <div className="space-y-8">
       {/* Hero Section */}
@@ -16,118 +18,85 @@ export default function PrivacyPage() {
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
           <Shield className="w-8 h-8 text-primary" />
         </div>
-        <h1 className="text-4xl font-bold">Privacy Policy</h1>
+        <h1 className="text-4xl font-bold">{privacy.hero.title}</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Your privacy is important to us. We&apos;re committed to protecting your personal information.
+          {privacy.hero.subtitle}
         </p>
-        <p className="text-sm text-muted-foreground">
-          Last updated: {new Date().toLocaleDateString()}
-        </p>
+        {privacy.hero.lastUpdated && (
+          <p className="text-sm text-muted-foreground">
+            Last updated: {new Date().toLocaleDateString()}
+          </p>
+        )}
       </div>
 
       {/* Quick Overview Cards */}
       <div className="grid md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader>
-            <Lock className="w-8 h-8 text-primary mb-2" />
-            <CardTitle className="text-lg">Secure by Design</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              We use industry-standard encryption and security practices.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <Eye className="w-8 h-8 text-primary mb-2" />
-            <CardTitle className="text-lg">Transparency</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              We&apos;re clear about what data we collect and why we need it.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <FileText className="w-8 h-8 text-primary mb-2" />
-            <CardTitle className="text-lg">Your Rights</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              You can access, modify, or delete your data at any time.
-            </p>
-          </CardContent>
-        </Card>
+        {privacy.quickOverview.map((item) => {
+          const Icon = item.icon === "Lock" ? Lock : item.icon === "Eye" ? Eye : FileText;
+          return (
+            <Card key={item.title}>
+              <CardHeader>
+                <Icon className="w-8 h-8 text-primary mb-2" />
+                <CardTitle className="text-lg">{item.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">{item.description}</p>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {/* Detailed Content */}
       <div className="prose prose-neutral dark:prose-invert max-w-none space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>1. Information We Collect</CardTitle>
-            <CardDescription>What data we gather when you use StreamHub</CardDescription>
+            <CardTitle>{privacy.sections[0].title}</CardTitle>
+            <CardDescription>{privacy.sections[0].description}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <h4 className="font-semibold mb-2">Account Information</h4>
-              <ul className="list-disc pl-6 text-sm text-muted-foreground space-y-1">
-                <li>Username and email address</li>
-                <li>Profile picture and bio</li>
-                <li>Account preferences and settings</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Usage Data</h4>
-              <ul className="list-disc pl-6 text-sm text-muted-foreground space-y-1">
-                <li>Streams you watch and create</li>
-                <li>Chat messages and interactions</li>
-                <li>Follow and block relationships</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Technical Data</h4>
-              <ul className="list-disc pl-6 text-sm text-muted-foreground space-y-1">
-                <li>IP address and device information</li>
-                <li>Browser type and version</li>
-                <li>Usage analytics and performance data</li>
-              </ul>
-            </div>
+            {privacy.sections[0].subsections?.map((subsection) => (
+              <div key={subsection.title}>
+                <h4 className="font-semibold mb-2">{subsection.title}</h4>
+                <ul className="list-disc pl-6 text-sm text-muted-foreground space-y-1">
+                  {subsection.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>2. How We Use Your Information</CardTitle>
-            <CardDescription>Why we collect and process your data</CardDescription>
+            <CardTitle>{privacy.sections[1].title}</CardTitle>
+            <CardDescription>{privacy.sections[1].description}</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="list-disc pl-6 text-sm text-muted-foreground space-y-2">
-              <li>Provide and improve our streaming services</li>
-              <li>Personalize your experience and content recommendations</li>
-              <li>Communicate important updates and features</li>
-              <li>Ensure platform security and prevent abuse</li>
-              <li>Analyze usage patterns to enhance performance</li>
+              {privacy.sections[1].items?.map((item, idx) => (
+                <li key={idx}>{typeof item === 'string' ? item : ''}</li>
+              ))}
             </ul>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>3. Data Sharing</CardTitle>
-            <CardDescription>Who we share your information with</CardDescription>
+            <CardTitle>{privacy.sections[2].title}</CardTitle>
+            <CardDescription>{privacy.sections[2].description}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4 text-sm text-muted-foreground">
-              <p className="font-semibold text-foreground">We do NOT sell your personal data.</p>
-              <p>We only share data with:</p>
+              <p className="font-semibold text-foreground">{privacy.sections[2].intro}</p>
+              <p>{privacy.sections[2].shareText}</p>
               <ul className="list-disc pl-6 space-y-1">
-                <li><strong>Service Providers:</strong> Clerk (auth), LiveKit (streaming), Vercel (hosting)</li>
-                <li><strong>Legal Requirements:</strong> When required by law or to protect rights</li>
-                <li><strong>Public Data:</strong> Your username, profile, and streams are publicly visible</li>
+                {privacy.sections[2].items?.map((item, idx) => (
+                  <li key={idx}>
+                    <strong>{typeof item === 'object' && 'label' in item ? item.label : ''}</strong> {typeof item === 'object' && 'text' in item ? item.text : item}
+                  </li>
+                ))}
               </ul>
             </div>
           </CardContent>
@@ -135,35 +104,25 @@ export default function PrivacyPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>4. Your Privacy Rights</CardTitle>
-            <CardDescription>What you can do with your data</CardDescription>
+            <CardTitle>{privacy.sections[3].title}</CardTitle>
+            <CardDescription>{privacy.sections[3].description}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <h4 className="font-semibold mb-2">Access & Export</h4>
-                <p className="text-muted-foreground">Request a copy of all your personal data</p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2">Correction</h4>
-                <p className="text-muted-foreground">Update inaccurate or incomplete information</p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2">Deletion</h4>
-                <p className="text-muted-foreground">Permanently delete your account and data</p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2">Opt-Out</h4>
-                <p className="text-muted-foreground">Unsubscribe from marketing communications</p>
-              </div>
+              {privacy.sections[3].rights?.map((right) => (
+                <div key={right.title}>
+                  <h4 className="font-semibold mb-2">{right.title}</h4>
+                  <p className="text-muted-foreground">{right.description}</p>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>5. Contact Us</CardTitle>
-            <CardDescription>Questions about your privacy?</CardDescription>
+            <CardTitle>{privacy.sections[4].title}</CardTitle>
+            <CardDescription>{privacy.sections[4].description}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-start gap-3">
@@ -175,8 +134,8 @@ export default function PrivacyPage() {
                     contact page
                   </Link>{" "}
                   or email us at{" "}
-                  <a href="mailto:privacy@streamhub.com" className="text-primary hover:underline">
-                    privacy@streamhub.com
+                  <a href={`mailto:${project.email.privacy}`} className="text-primary hover:underline">
+                    {project.email.privacy}
                   </a>
                 </p>
               </div>

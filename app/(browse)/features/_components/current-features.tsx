@@ -1,14 +1,17 @@
 import { currentFeatures } from "@/lib/features-data";
+import { contentConfig } from "@/lib/content-config";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 export const CurrentFeatures = () => {
+  const { features } = contentConfig;
+
   return (
     <section className="mb-20">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold mb-3">What We Offer Today</h2>
+        <h2 className="text-3xl font-bold mb-3">{features.currentFeatures.title}</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          StreamHub is powered by cutting-edge technologies to deliver the best streaming experience
+          {features.currentFeatures.subtitle}
         </p>
       </div>
       

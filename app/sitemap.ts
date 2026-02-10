@@ -1,8 +1,9 @@
 import { MetadataRoute } from "next";
 import { db } from "@/lib/db";
+import { contentConfig } from "@/lib/content-config";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://twitch-clone--codesofakash.vercel.app";
+  const baseUrl = contentConfig.project.baseUrl;
 
   // Get all users for dynamic routes
   const users = await db.user.findMany({
