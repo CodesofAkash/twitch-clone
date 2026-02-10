@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { LiveBadge } from "@/components/live-badge";
 
 interface FeaturedStream {
   username: string;
@@ -27,37 +26,37 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
 
   const nextSlide = useCallback(() => {
     if (isTransitioning || streams.length === 0) return;
-    
+
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev + 1) % streams.length);
-    
-    setTimeout(() => setIsTransitioning(false), 700);
+
+    setTimeout(() => setIsTransitioning(false), 500);
   }, [isTransitioning, streams.length]);
 
   const prevSlide = useCallback(() => {
     if (isTransitioning || streams.length === 0) return;
-    
+
     setIsTransitioning(true);
     setCurrentIndex((prev) => (prev - 1 + streams.length) % streams.length);
-    
-    setTimeout(() => setIsTransitioning(false), 700);
+
+    setTimeout(() => setIsTransitioning(false), 500);
   }, [isTransitioning, streams.length]);
 
   const goToSlide = (index: number) => {
     if (isTransitioning || index === currentIndex) return;
-    
+
     setIsTransitioning(true);
     setCurrentIndex(index);
-    
-    setTimeout(() => setIsTransitioning(false), 700);
+
+    setTimeout(() => setIsTransitioning(false), 500);
   };
 
   useEffect(() => {
     if (streams.length === 0) return;
-    
+
     const timer = setInterval(() => {
       nextSlide();
-    }, 7000); // 7 seconds - longer wait
+    }, 7000);
 
     return () => clearInterval(timer);
   }, [nextSlide, streams.length]);
@@ -69,41 +68,50 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
   const current = streams[currentIndex];
 
   return (
-    <div className="relative h-[400px] w-full bg-gradient-to-b from-background to-transparent mb-8 overflow-hidden">
+    <div className="relative h-[400px] w-full bg-background mb-8 overflow-hidden rounded-xl">
       <Link href={`/${current.username}`}>
         <div className="relative h-full w-full">
-          <div className={`
-            absolute inset-0 transition-opacity duration-700 ease-in-out
-            ${isTransitioning ? 'opacity-0' : 'opacity-100'}
-          `}>
-            <Image
-              src={current.thumbnail}
-              alt={current.title}
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-              unoptimized
-            />
+          {/* Sliding Image Container */}
+          <div className="relative h-full w-full overflow-hidden">
+            <div
+              className="flex h-full transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {streams.map((stream, index) => (
+                <div key={index} className="min-w-full h-full relative">
+                  <Image
+                    src={stream.thumbnail}
+                    alt={stream.title}
+                    fill
+                    className="object-cover"
+                    priority={index === 0}
+                    sizes="100vw"
+                    unoptimized
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-          
+
+          {/* Gradient Overlays */}
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/30 to-transparent" />
-          
-          <div className={`
-            absolute bottom-0 left-0 p-8 max-w-2xl transition-all duration-700 ease-in-out
-            ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}
-          `}>
+
+          {/* Content */}
+          <div className="absolute bottom-0 left-0 p-8 max-w-2xl">
+            {/* Compact LIVE Badge */}
             {current.isLive && (
               <div className="mb-3">
-                <LiveBadge />
+                <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase">
+                  Live
+                </span>
               </div>
             )}
-            
+
             <h2 className="text-4xl font-bold text-white mb-2 drop-shadow-lg">
               {current.title}
             </h2>
-            
+
             <div className="flex items-center gap-3 text-white/90">
               <p className="font-semibold">{current.username}</p>
               <span>•</span>
@@ -119,12 +127,13 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
         </div>
       </Link>
 
+      {/* Navigation Arrows */}
       {streams.length > 1 && (
         <>
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white h-12 w-12 rounded-full transition-all"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white h-12 w-12 rounded-full"
             onClick={(e) => {
               e.preventDefault();
               prevSlide();
@@ -133,11 +142,11 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
           >
             <ChevronLeft className="h-8 w-8" />
           </Button>
-          
+
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white h-12 w-12 rounded-full transition-all"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white h-12 w-12 rounded-full"
             onClick={(e) => {
               e.preventDefault();
               nextSlide();
@@ -149,6 +158,7 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
         </>
       )}
 
+      {/* Dots */}
       {streams.length > 1 && (
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
           {streams.map((_, index) => (
@@ -159,13 +169,9 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
                 goToSlide(index);
               }}
               disabled={isTransitioning}
-              className={`
-                h-2 rounded-full transition-all duration-300
-                ${index === currentIndex 
-                  ? "w-8 bg-white" 
-                  : "w-2 bg-white/50 hover:bg-white/75"
-                }
-              `}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/75"
+              }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
@@ -177,13 +183,8 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
 
 export const FeaturedCarouselSkeleton = () => {
   return (
-    <div className="relative h-[400px] w-full bg-muted mb-8 rounded-lg overflow-hidden">
+    <div className="relative h-[400px] w-full bg-muted mb-8 rounded-xl overflow-hidden">
       <Skeleton className="h-full w-full" />
-      <div className="absolute bottom-0 left-0 p-8 space-y-3">
-        <Skeleton className="h-8 w-32" />
-        <Skeleton className="h-12 w-96" />
-        <Skeleton className="h-6 w-64" />
-      </div>
     </div>
   );
 };

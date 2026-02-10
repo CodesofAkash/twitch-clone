@@ -1,32 +1,43 @@
-// app/(browse)/(home)/_components/live-channels.tsx
-import Link from "next/link";
-import { getStreams } from "@/lib/feed-service";
-import { ResultCard, ResultCardSkeleton } from "./result-card";
+"use client";
 
-export const LiveChannels = async () => {
-  const data = await getStreams();
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ResultCard, ResultCardSkeleton } from "./result-card";
+import { getStreams } from "@/lib/feed-service";
+
+interface LiveChannelsProps {
+  data: Awaited<ReturnType<typeof getStreams>>;
+}
+
+export const LiveChannels = ({ data }: LiveChannelsProps) => {
+  const [showAll, setShowAll] = useState(false);
+
   const liveStreams = data.filter((stream) => stream.isLive);
 
   if (liveStreams.length === 0) {
     return null;
   }
 
+  const displayStreams = showAll ? liveStreams : liveStreams.slice(0, 8);
+
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">Live Channels</h2>
-        {liveStreams.length > 5 && (
-          <Link
-            href="/search?filter=live"
-            className="text-sm text-muted-foreground hover:text-primary"
+        {liveStreams.length > 8 && (
+          <Button
+            variant="ghost"
+            onClick={() => setShowAll(!showAll)}
+            className="text-sm"
           >
-            Show more
-          </Link>
+            {showAll ? "Show Less" : `Show All (${liveStreams.length})`}
+          </Button>
         )}
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-        {liveStreams.slice(0, 10).map((result) => (
-          <ResultCard key={result.id} data={result} />
+        {displayStreams.map((stream) => (
+          <ResultCard key={stream.id} data={stream} />
         ))}
       </div>
     </div>
@@ -38,7 +49,7 @@ export const LiveChannelsSkeleton = () => {
     <div>
       <div className="h-8 w-48 bg-muted rounded mb-4" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-        {[...Array(5)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <ResultCardSkeleton key={i} />
         ))}
       </div>

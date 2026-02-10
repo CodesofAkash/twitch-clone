@@ -22,7 +22,6 @@ export const ResultCard = ({ data }: ResultCardProps) => {
   return (
     <Link href={`/${data.user.username}`}>
       <div className="w-full space-y-3 group">
-        {/* Thumbnail with live badge */}
         <Thumbnail
           src={data.thumbnailUrl}
           fallback={data.user.imageUrl}
@@ -30,49 +29,44 @@ export const ResultCard = ({ data }: ResultCardProps) => {
           username={data.user.username}
         />
 
-        {/* Stream info */}
         <div className="flex gap-x-3">
           <UserAvatar
             username={data.user.username}
             imageUrl={data.user.imageUrl}
             isLive={data.isLive}
           />
-          
+
           <div className="flex flex-col text-sm overflow-hidden flex-1">
-            {/* Stream title */}
             <p className="truncate font-semibold hover:text-primary transition">
               {data.name}
             </p>
-            
-            {/* Username */}
-            <p className="text-muted-foreground text-sm">
-              {data.user.username}
-            </p>
-            
-            {/* Category */}
+
+            <p className="text-muted-foreground text-sm">{data.user.username}</p>
+
             {data.categoryName && (
               <p className="text-xs text-muted-foreground truncate">
                 {data.categoryName}
               </p>
             )}
-            
-            {/* Viewer count (only show if live) */}
+
             {data.isLive && data.viewerCount > 0 && (
               <p className="text-xs text-red-500 font-medium">
                 {data.viewerCount.toLocaleString()} viewers
               </p>
             )}
-            
-            {/* Tags */}
+
+            {/* CLICKABLE TAGS - Redirect to search */}
             {data.tagNames && data.tagNames.length > 0 && (
-              <div className="flex gap-1 mt-1 flex-wrap">
+              <div className="flex gap-1 mt-1 flex-wrap" onClick={(e) => e.stopPropagation()}>
                 {data.tagNames.slice(0, 2).map((tag) => (
-                  <span
+                  <Link
                     key={tag}
-                    className="text-xs bg-accent text-accent-foreground px-1.5 py-0.5 rounded"
+                    href={`/search?tag=${encodeURIComponent(tag)}`}
+                    className="text-xs bg-accent text-accent-foreground px-1.5 py-0.5 rounded hover:bg-accent/80 transition"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {tag}
-                  </span>
+                  </Link>
                 ))}
               </div>
             )}
