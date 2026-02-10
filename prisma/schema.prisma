@@ -133,3 +133,15 @@ model Block {
   @@index([blockerId])
   @@index([blockedId])
 }
+
+model Suggestion {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  title       String
+  description String
+  category    String   // "feature" | "bug" | "improvement"
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+}
