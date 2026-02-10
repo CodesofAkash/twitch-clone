@@ -20,7 +20,7 @@ We take the security of our project seriously. If you have discovered a security
 
 ### Instead:
 
-**Email us directly at:** `security@yourapp.com` (replace with your actual security email)
+**Email us directly at:** `akashcodesharma@gmail.com` (replace with your actual security email)
 
 Include the following information in your report:
 - Type of vulnerability
