@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getUserByUsername } from "@/lib/user-service";
 import { isFollowingUser } from "@/lib/follow-service";
 import { isBlockedByUser } from "@/lib/block-service";
-import { StreamPlayer } from "@/components/stream-player";
+import { LazyStreamPlayer } from "@/components/stream-player/lazy-stream-player";
 import { db } from "@/lib/db";
 import { getAllCategories } from "@/lib/category-service";
 import { contentConfig } from "@/lib/content-config";
@@ -76,7 +76,7 @@ const UserPage = async ({ params }: UserPageProps) => {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <StreamPlayer
+        <LazyStreamPlayer
           user={{
             ...user,
             _count: {

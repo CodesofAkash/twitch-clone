@@ -15,9 +15,9 @@ export default function AboutPage() {
   const { about, project } = contentConfig;
 
   return (
-    <div className="space-y-12">
+    <article className="space-y-12">
       {/* Hero */}
-      <div className="text-center space-y-6">
+      <header className="text-center space-y-6">
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/50 mb-4">
           <Sparkles className="w-10 h-10 text-white" />
         </div>
@@ -29,7 +29,7 @@ export default function AboutPage() {
             {about.hero.subtitle}
           </p>
         </div>
-      </div>
+      </header>
 
       {/* Mission */}
       <Card className="border-primary/20">
@@ -129,6 +129,6 @@ export default function AboutPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </article>
   );
 }

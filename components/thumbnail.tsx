@@ -38,8 +38,6 @@ export const Thumbnail = ({
         alt={username}
         className="object-cover transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 rounded-md"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        priority={false}
-        unoptimized
       />
     );
   }

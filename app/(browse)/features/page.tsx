@@ -16,13 +16,13 @@ export default function FeaturesPage() {
   const { features, project } = contentConfig;
 
   return (
-    <div className="container max-w-7xl mx-auto py-10 px-4">
-      <div className="text-center mb-12">
+    <main className="container max-w-7xl mx-auto py-10 px-4">
+      <header className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4">{features.hero.title}</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           {features.hero.subtitle}
         </p>
-      </div>
+      </header>
 
       <CurrentFeatures />
       <FutureFeatures />
@@ -51,6 +51,6 @@ export default function FeaturesPage() {
       </section>
 
       <SuggestionForm />
-    </div>
+    </main>
   );
 }

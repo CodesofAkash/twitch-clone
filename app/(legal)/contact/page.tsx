@@ -15,9 +15,9 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   const { contact, project } = contentConfig;
   return (
-    <div className="space-y-12">
+    <article className="space-y-12">
       {/* Hero */}
-      <div className="text-center space-y-4">
+      <header className="text-center space-y-4">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
           <Send className="w-8 h-8 text-primary" />
         </div>
@@ -25,7 +25,7 @@ export default function ContactPage() {
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           {contact.hero.subtitle}
         </p>
-      </div>
+      </header>
 
       {/* Contact Methods */}
       <div className="grid md:grid-cols-3 gap-6">
@@ -123,6 +123,6 @@ export default function ContactPage() {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </article>
   );
 }

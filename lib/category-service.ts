@@ -1,22 +1,32 @@
 import { db } from "@/lib/db";
+import { unstable_cache } from "next/cache";
 
 // Get all active categories
 export const getAllCategories = async () => {
-  const categories = await db.category.findMany({
-    where: {
-      isActive: true,
-    },
-    orderBy: [
-      {
-        isPredefined: "desc", // Predefined first
-      },
-      {
-        name: "asc",
-      },
-    ],
-  });
+  return unstable_cache(
+    async () => {
+      const categories = await db.category.findMany({
+        where: {
+          isActive: true,
+        },
+        orderBy: [
+          {
+            isPredefined: "desc", // Predefined first
+          },
+          {
+            name: "asc",
+          },
+        ],
+      });
 
-  return categories;
+      return categories;
+    },
+    ["all-categories"],
+    {
+      revalidate: 300, // Cache for 5 minutes
+      tags: ["categories"],
+    }
+  )();
 };
 
 // Get category by slug

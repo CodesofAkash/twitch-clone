@@ -15,11 +15,13 @@ import { OfflineIndicator } from "@/components/offline-indicator";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap", // Improve perceived load time
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap", // Improve perceived load time
 });
 
 export default function RootLayout({

@@ -8,7 +8,7 @@ interface SafeImageProps extends Omit<ImageProps, "onError"> {
 }
 
 export const SafeImage = ({ 
-  src, 
+  src,
   alt, 
   fallbackSrc = "/OpenStream.png",
   ...props 

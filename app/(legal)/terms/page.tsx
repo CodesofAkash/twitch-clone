@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   const { terms } = contentConfig;
   return (
-    <div className="space-y-8">
+    <article className="space-y-8">
       {/* Hero */}
-      <div className="text-center space-y-4">
+      <header className="text-center space-y-4">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
           <Scale className="w-8 h-8 text-primary" />
         </div>
@@ -27,7 +27,7 @@ export default function TermsPage() {
             Last updated: {new Date().toLocaleDateString()}
           </p>
         )}
-      </div>
+      </header>
 
       <Alert>
         <AlertTriangle className="h-4 w-4" />
@@ -82,6 +82,6 @@ export default function TermsPage() {
           );
         })}
       </div>
-    </div>
+    </article>
   );
 }

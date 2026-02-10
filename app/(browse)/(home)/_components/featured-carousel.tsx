@@ -86,7 +86,6 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
                     className="object-cover"
                     priority={index === 0}
                     sizes="100vw"
-                    unoptimized
                   />
                 </div>
               ))}

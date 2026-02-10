@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   const { privacy, project } = contentConfig;
   return (
-    <div className="space-y-8">
+    <article className="space-y-8">
       {/* Hero Section */}
-      <div className="text-center space-y-4">
+      <header className="text-center space-y-4">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
           <Shield className="w-8 h-8 text-primary" />
         </div>
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
             Last updated: {new Date().toLocaleDateString()}
           </p>
         )}
-      </div>
+      </header>
 
       {/* Quick Overview Cards */}
       <div className="grid md:grid-cols-3 gap-4">
@@ -143,6 +143,6 @@ export default function PrivacyPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </article>
   );
 }

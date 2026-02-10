@@ -1,5 +1,6 @@
 import { getSelf } from "@/lib/auth-service";
 import { db } from "@/lib/db";
+import { unstable_cache } from "next/cache";
 
 export const getStreams = async () => {
   let userId;
