@@ -4,7 +4,7 @@ import { LiveChannels, LiveChannelsSkeleton } from "./_components/live-channels"
 import { Categories, CategoriesSkeleton } from "./_components/categories";
 import { RecommendedChannels, RecommendedChannelsSkeleton } from "./_components/recommended-channels";
 import { getStreams } from "@/lib/feed-service";
-// import { Footer } from "@/components/footer";
+import { Footer } from "@/components/footer";
 
 async function getHomeData() {
   const streams = await getStreams();
@@ -35,7 +35,7 @@ export default async function Home() {
       </div>
 
       {/* Footer - ONLY on homepage */}
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
