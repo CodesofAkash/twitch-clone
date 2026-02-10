@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
+import { SafeImage } from "@/components/safe-image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ export const FeaturedCarousel = ({ streams }: FeaturedCarouselProps) => {
             >
               {streams.map((stream, index) => (
                 <div key={index} className="min-w-full h-full relative">
-                  <Image
+                  <SafeImage
                     src={stream.thumbnail}
                     alt={stream.title}
                     fill

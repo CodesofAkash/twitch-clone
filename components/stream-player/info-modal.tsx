@@ -18,7 +18,7 @@ import { updateStream, updateStreamCategory, updateStreamTags } from "@/actions/
 import { UploadDropzone } from "@/lib/uploadthing";
 import { Hint } from "@/components/hint";
 import { Trash } from "lucide-react";
-import Image from "next/image";
+import { SafeImage } from "@/components/safe-image";
 import { CategorySelector } from "@/components/category-selector";
 import { TagInput } from "@/components/tag-input";
 
@@ -173,7 +173,7 @@ export const InfoModal = ({
                     </Button>
                   </Hint>
                 </div>
-                <Image
+                <SafeImage
                   alt="Thumbnail"
                   src={thumbnailUrl}
                   fill
@@ -196,7 +196,14 @@ export const InfoModal = ({
                     setThumbnailUrl(res?.[0]?.url);
                     updateStream({ thumbnailUrl: res?.[0]?.url }).then(() => {
                       router.refresh();
+                      toast.success("Thumbnail uploaded successfully");
+                    }).catch(() => {
+                      toast.error("Failed to save thumbnail");
                     });
+                  }}
+                  onUploadError={(error: Error) => {
+                    console.error("Upload error:", error);
+                    toast.error(error.message || "Failed to upload thumbnail. Please check file size and format.");
                   }}
                 />
               </div>

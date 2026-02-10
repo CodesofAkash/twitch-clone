@@ -29,7 +29,7 @@ const UnblockButton = ({ userId }: UnblockButtonProps) => {
     size="sm"
     className="text-blue-500 w-full"
     >
-        Unblock
+        {isPending ? "Unblocking..." : "Unblock"}
     </Button>
   )
 }

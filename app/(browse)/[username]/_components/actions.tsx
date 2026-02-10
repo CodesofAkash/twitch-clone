@@ -7,6 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import { onBlock, onUnblock } from "@/actions/block";
 import { onFollow, onUnfollow } from "@/actions/follow";
 import { Button } from "@/components/ui/button";
+import { getErrorMessage } from "@/lib/error-utils";
 
 interface ActionsProps {
   isFollowing: boolean;
@@ -33,7 +34,7 @@ export const Actions = ({
         .then((data) =>
           toast.success(`You are now following ${data.following.username}`)
         )
-        .catch(() => toast.error("Something went wrong"));
+        .catch((error) => toast.error(getErrorMessage(error)));
     });
   };
 
@@ -47,7 +48,7 @@ export const Actions = ({
         .then((data) =>
           toast.success(`You have unfollowed ${data.following.username}`)
         )
-        .catch(() => toast.error("Something went wrong"));
+        .catch((error) => toast.error(getErrorMessage(error)));
     });
   };
 
@@ -69,7 +70,7 @@ export const Actions = ({
         .then((data) =>
           toast.success(`You have blocked ${data?.blocked.username}`)
         )
-        .catch(() => toast.error("Something went wrong"));
+        .catch((error) => toast.error(getErrorMessage(error)));
     });
   };
 
@@ -83,21 +84,21 @@ export const Actions = ({
         .then((data) =>
           toast.success(`You have unblocked ${data.blocked.username}`)
         )
-        .catch(() => toast.error("Something went wrong"));
+        .catch((error) => toast.error(getErrorMessage(error)));
     });
   };
 
   return (
     <>
       <Button disabled={isPending} onClick={onClick} variant={"primary"}>
-        {isFollowing ? "Unfollow" : "Follow"}
+        {isPending ? "Loading..." : isFollowing ? "Unfollow" : "Follow"}
       </Button>
       <Button
         onClick={isBlocking ? handleUnblock : handleBlock}
         disabled={isPending}
         variant={"destructive"}
       >
-        {isBlocking ? "Unblock" : "Block"}
+        {isPending ? "Loading..." : isBlocking ? "Unblock" : "Block"}
       </Button>
     </>
   );

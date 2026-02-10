@@ -16,6 +16,9 @@ export const Recommended = ({data}: RecommendedProps) => {
 
     const showLabel = !collapsed && data.length > 0;
 
+    // Limit to 7 items
+    const displayData = data.slice(0, 7);
+
     return (
         <div>
             {showLabel && (
@@ -25,8 +28,8 @@ export const Recommended = ({data}: RecommendedProps) => {
                     </p>
                 </div>
             )}
-            <ul className="space-y-2 px-2">
-                {data.map((user) => (
+            <ul className="space-y-2 px-2 max-h-[400px] overflow-y-auto">
+                {displayData.map((user) => (
                     <UserItem key={user.id} username={user.username} imageUrl={user.imageUrl} isLive={user.stream?.isLive} />
                 ))}
             </ul>

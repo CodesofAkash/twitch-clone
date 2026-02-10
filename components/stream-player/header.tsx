@@ -38,8 +38,8 @@ export const Header = ({
   const isHost = viewerIdentity === hostAsViewer;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 items-start justify-between px-4">
-      <div className="flex items-center gap-x-3">
+    <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 items-start justify-between px-2 sm:px-4">
+      <div className="flex items-center gap-x-3 w-full lg:w-auto">
         <UserAvatar
           imageUrl={imageUrl}
           username={hostName}
@@ -47,14 +47,14 @@ export const Header = ({
           isLive={isLive}
           showBadge
         />
-        <div className="space-y-1">
+        <div className="space-y-1 flex-1 min-w-0">
           <div className="flex items-center gap-x-2">
-            <h2 className="text-lg font-semibold">
+            <h2 className="text-base sm:text-lg font-semibold truncate">
               {hostName}
             </h2>
             <VerifiedMark />
           </div>
-          <p className="text-sm font-semibold">{name}</p>
+          <p className="text-sm font-semibold truncate">{name}</p>
           {isLive && (
             <div className="flex items-center gap-x-1 text-xs text-muted-foreground">
               <UserIcon className="h-4 w-4" />
@@ -81,7 +81,7 @@ export const Header = ({
 
 export const HeaderSkeleton = () => {
   return (
-    <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 items-start justify-between px-4">
+    <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 items-start justify-between px-2 sm:px-4">
       <div className="flex items-center gap-x-2">
         <UserAvatarSkeleton size="lg" />
         <div className="space-y-2">
