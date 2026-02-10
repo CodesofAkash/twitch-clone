@@ -12,6 +12,7 @@ export const createViewerToken = async (hostIdentity: string) => {
   try {
     self = await getSelf();
   } catch {
+    // Create anonymous guest user for unauthenticated viewers
     const id = v4();
     const username = `guest#${Math.floor(Math.random() * 1000)}`;
     self = { id, username };
@@ -31,6 +32,7 @@ export const createViewerToken = async (hostIdentity: string) => {
 
   const isHost = self.id === host.id;
 
+  // Create LiveKit access token with appropriate permissions
   const token = new AccessToken(
     process.env.LIVEKIT_API_KEY!,
     process.env.LIVEKIT_API_SECRET!,
@@ -40,6 +42,7 @@ export const createViewerToken = async (hostIdentity: string) => {
     }
   );
 
+  // Grant room access: viewers can join and send data (chat), but not publish video/audio
   token.addGrant({
     room: host.id,
     roomJoin: true,

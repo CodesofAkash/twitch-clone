@@ -102,7 +102,7 @@ export const contentConfig = {
         title: "GitHub Issues",
         description: "Report bugs or suggest improvements",
         buttonText: "Open Issue",
-        link: "https://github.com/CodesofAkash/twitch-clone/issues",
+        link: "https://github.com/CodesofAkash/openstream/issues",
       },
     ],
     form: {

@@ -168,7 +168,6 @@ export const StreamInfoCard = ({
                   router.refresh();
                 }}
                 onUploadError={(error: Error) => {
-                  console.error("Upload error:", error);
                   toast.error(error.message || "Failed to upload thumbnail. Please check file size and format.");
                 }}
               />
