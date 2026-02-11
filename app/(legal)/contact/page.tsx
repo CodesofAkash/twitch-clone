@@ -125,7 +125,7 @@ export default function ContactPage() {
           </CardHeader>
           <CardContent className="text-center">
             <Button variant="outline" asChild className="w-full">
-              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+              <a href={contact.methods[2].link} target="_blank" rel="noopener noreferrer">
                 {contact.methods[2].buttonText}
               </a>
             </Button>

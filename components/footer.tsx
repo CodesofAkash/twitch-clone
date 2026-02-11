@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
+import { currentUser } from "@clerk/nextjs/server";
 
-export const Footer = () => {
+export const Footer = async () => {
+
+  const user = await currentUser();
+
   return (
     <footer className="border-t bg-gradient-to-b from-background to-muted/20 mt-20">
       <div className="max-w-screen-2xl mx-auto px-8">
@@ -87,11 +89,13 @@ export const Footer = () => {
                   Browse Streams
                 </Link>
               </li>
-              <li>
-                <Link href="/sign-up" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Start Streaming
-                </Link>
-              </li>
+              {user && (
+                <li>
+                  <Link href={`/u/${user?.username}`} className="text-muted-foreground hover:text-foreground transition-colors">
+                    Start Streaming
+                  </Link>
+                </li>
+              )}
               <li>
                 <a
                   href="https://github.com/CodesofAkash"
