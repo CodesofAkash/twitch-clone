@@ -21,6 +21,7 @@ interface BioModalProps {
 export const BioModal = ({ initialValue }: BioModalProps) => {
   const closeRef = useRef<ElementRef<"button">>(null);
   const [isPending, startTransition] = useTransition();
+  const [open, setOpen] = useState(false);
   const [value, setValue] = useState(initialValue || "");
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,15 +30,15 @@ export const BioModal = ({ initialValue }: BioModalProps) => {
     startTransition(() => {
       updateUser({ bio: value })
         .then(() => {
+          setOpen(false);
           toast.success("User bio updated");
-          closeRef?.current?.click();
         })
         .catch(() => toast.error("Something went wrong"));
     });
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="link" size="sm" className="ml-auto">
           Edit

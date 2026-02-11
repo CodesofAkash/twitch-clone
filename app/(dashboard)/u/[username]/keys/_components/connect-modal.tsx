@@ -33,22 +33,23 @@ export const ConnectModal = () => {
   const router = useRouter();
   const closeRef = useRef<ComponentRef<"button">>(null);
   const [isPending, startTransition] = useTransition();
+  const [open, setOpen] = useState(false);
   const [ingressType, setIngressType] = useState<IngressType>(RTMP);
 
   const onSubmit = () => {
     startTransition(() => {
       createIngress(parseInt(ingressType))
         .then(() => {
+          setOpen(false);
+          router.refresh();
           toast.success("Ingress created");
-          router.refresh(); // Force page refresh
-          closeRef?.current?.click();
         })
         .catch(() => toast.error("Something went wrong"));
     });
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="primary">Generate connection</Button>
       </DialogTrigger>

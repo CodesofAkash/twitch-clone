@@ -44,6 +44,7 @@ export const InfoModal = ({
   const router = useRouter();
   const closeRef = useRef<ElementRef<"button">>(null);
   const [isPending, startTransition] = useTransition();
+  const [open, setOpen] = useState(false);
 
   const [name, setName] = useState(initialName);
   const [thumbnailUrl, setThumbnailUrl] = useState(initialThumbnailUrl);
@@ -54,9 +55,10 @@ export const InfoModal = ({
     startTransition(() => {
       updateStream({ thumbnailUrl: null })
         .then(() => {
-          toast.success("Thumbnail removed");
           setThumbnailUrl("");
+          setOpen(false);
           router.refresh();
+          toast.success("Thumbnail removed");
         })
         .catch(() => toast.error("Something went wrong"));
     });
@@ -98,7 +100,7 @@ export const InfoModal = ({
         await Promise.all(updatePromises);
         
         // Close modal first for better UX
-        closeRef?.current?.click();
+        setOpen(false);
         
         // Refresh in background
         router.refresh();
@@ -118,7 +120,7 @@ export const InfoModal = ({
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="link" size="sm" className="ml-auto">
           Edit
@@ -195,6 +197,7 @@ export const InfoModal = ({
                   onClientUploadComplete={(res: { url: string }[]) => {
                     setThumbnailUrl(res?.[0]?.url);
                     updateStream({ thumbnailUrl: res?.[0]?.url }).then(() => {
+                      setOpen(false);
                       router.refresh();
                       toast.success("Thumbnail uploaded successfully");
                     }).catch(() => {

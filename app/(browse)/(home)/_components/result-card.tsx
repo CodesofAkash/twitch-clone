@@ -31,7 +31,7 @@ export const ResultCard = ({ data }: ResultCardProps) => {
         />
       </Link>
 
-      <div className="flex gap-x-3">
+      <div className="flex gap-x-3 mt-2">
         <Link href={`/${data.user.username}`}>
           <UserAvatar
             username={data.user.username}

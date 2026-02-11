@@ -18,19 +18,21 @@ export const RecommendedChannels = ({ data }: RecommendedChannelsProps) => {
     return null;
   }
 
-  const displayStreams = showAll ? offlineStreams : offlineStreams.slice(0, 8);
+  // 2 rows: 2×1(mobile), 2×2(md), 2×3(lg), 2×4(xl), 2×5(2xl) = ~10 items for 2 rows at largest breakpoint
+  const itemsToShowInitially = 10;
+  const displayStreams = showAll ? offlineStreams : offlineStreams.slice(0, itemsToShowInitially);
 
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">Recommended Channels</h2>
-        {offlineStreams.length > 8 && (
+        {offlineStreams.length > itemsToShowInitially && (
           <Button
             variant="ghost"
             onClick={() => setShowAll(!showAll)}
             className="text-sm"
           >
-            {showAll ? "Show Less" : `Show All (${offlineStreams.length})`}
+            {showAll ? "Show Less" : `Show More (${offlineStreams.length})`}
           </Button>
         )}
       </div>
